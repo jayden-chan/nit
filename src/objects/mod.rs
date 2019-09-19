@@ -5,6 +5,9 @@ use crate::{ray::Ray, Vector};
 mod sphere;
 pub use sphere::*;
 
+mod hittable_list;
+pub use hittable_list::*;
+
 /// Describes an interaction between an incoming [`Ray`]
 /// and an object.
 ///
@@ -13,8 +16,11 @@ pub use sphere::*;
 pub struct Hit {
     pub u: f32,
     pub v: f32,
+    /// The point t along the ray where the intersection occurs
     pub t: f32,
+    /// The intersection point in 3D space
     pub p: Vector,
+    /// The intersection surface normal
     pub normal: Vector,
 }
 

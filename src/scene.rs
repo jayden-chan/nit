@@ -1,7 +1,7 @@
-use crate::{camera::Camera, objects::Hittable};
+use crate::{camera::Camera, objects::HittableList};
 
 #[derive(Debug)]
 pub struct Scene {
-    pub objects: Vec<Box<dyn Hittable>>,
+    pub objects: HittableList,
     pub camera: Camera,
 }

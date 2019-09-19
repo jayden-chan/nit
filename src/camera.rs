@@ -52,10 +52,10 @@ impl Camera {
 
     pub fn default(aspect_r: f32) -> Self {
         let defaults = CameraConstructor {
-            look_from: Vector::zeros(),
-            look_at: Vector::new(0.0, 0.0, -1.0),
+            look_at: Vector::zeros(),
+            look_from: Vector::new(0.0, 0.0, 10.0),
             vup: Vector::new(0.0, 1.0, 0.0),
-            vfov: 90.0,
+            vfov: 45.0,
             aspect_r,
             aperture: 0.0,
             focus_dist: 1.0,

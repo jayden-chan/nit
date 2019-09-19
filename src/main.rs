@@ -15,7 +15,7 @@ mod vector3;
 
 use crate::{
     camera::Camera, color::ToneMappingOperator, config::Config,
-    image::ImageBuffer, scene::Scene, vector3::Vector,
+    image::ImageBuffer, objects::HittableList, scene::Scene, vector3::Vector,
 };
 
 fn main() -> Result<(), String> {
@@ -23,8 +23,11 @@ fn main() -> Result<(), String> {
         resolution: (300, 300),
         samples: 1,
         scene: Scene {
-            objects: vec![Box::new(objects::Sphere::new(Vector::zeros(), 1.0))],
-            camera: Camera::default(16.0 / 9.0),
+            objects: HittableList::new(vec![Box::new(objects::Sphere::new(
+                Vector::zeros(),
+                1.0,
+            ))]),
+            camera: Camera::default(1.0),
         },
     };
 

@@ -2,8 +2,13 @@ use rand::prelude::*;
 use rayon::prelude::*;
 
 use crate::{
-    config::Config, image::ImageBuffer, ray::Ray, scene::Scene, Vector,
+    config::Config, image::ImageBuffer, objects::Hittable, ray::Ray,
+    scene::Scene, Vector,
 };
+
+use std::f32;
+
+const T_MIN: f32 = 0.0001;
 
 pub fn render(image: &mut ImageBuffer, config: Config) {
     let (width, height) = config.resolution;
@@ -35,9 +40,25 @@ pub fn trace(r: Ray, scene: &Scene) -> Vector {
     let mut rng = rand::thread_rng();
 
     loop {
-        if rng.gen() {
-            break;
+        let hit_result = scene.objects.hit(r, T_MIN, f32::MAX);
+
+        if hit_result.is_none() {
+            return Vector::new(255.0, 255.0, 255.0);
         }
+
+        let hit = hit_result.unwrap();
+
+        return 0.5
+            * 255.0
+            * Vector::new(
+                hit.normal.x + 1.0,
+                hit.normal.y + 1.0,
+                hit.normal.z + 1.0,
+            );
+
+        // if rng.gen() {
+        //     break;
+        // }
     }
 
     Vector::zeros()
