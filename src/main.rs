@@ -12,14 +12,12 @@ mod ray;
 mod scene;
 mod vector3;
 
-use camera::Camera;
-use config::Config;
-use image::{ImageBuffer, Pixel};
-use math::Onb;
-use scene::Scene;
-use vector3::Vector;
+use crate::{
+    camera::Camera, color::ToneMappingOperator, config::Config,
+    image::ImageBuffer, math::Onb, scene::Scene, vector3::Vector,
+};
 
-fn main() {
+fn main() -> Result<(), String> {
     let config = Config {
         resolution: (300, 300),
         samples: 150,
@@ -39,4 +37,6 @@ fn main() {
     };
 
     let buffer = ImageBuffer::new(config.resolution);
+
+    buffer.to_ppm(String::from("image.ppm"), ToneMappingOperator::Clamp(255.0))
 }

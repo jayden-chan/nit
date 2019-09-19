@@ -15,7 +15,7 @@ impl ToneMappingOperator {
 /// Applies the clamp tone-mapping operator on the provided pixel buffer.
 /// The pixel values will be clamped between 0 and
 fn clamp(buffer: &mut Vec<Vec<Pixel>>, max: f32) {
-    buffer.iter().for_each(|row| {
+    buffer.iter_mut().for_each(|row| {
         row.iter_mut().for_each(|pixel| {
             if pixel.r > max {
                 pixel.r = max;

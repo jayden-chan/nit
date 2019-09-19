@@ -28,8 +28,8 @@ impl ImageBuffer {
             buffer.push(Vec::with_capacity(width));
 
             for x in 0..width {
-                buffer[x].push(Pixel {
-                    r: 0.0,
+                buffer[y].push(Pixel {
+                    r: 255.0,
                     g: 0.0,
                     b: 0.0,
                     x,
@@ -44,7 +44,7 @@ impl ImageBuffer {
 
 impl ImageBuffer {
     pub fn to_ppm(
-        self,
+        mut self,
         out_path: String,
         tmo: ToneMappingOperator,
     ) -> Result<(), String> {
