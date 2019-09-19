@@ -2,7 +2,9 @@
 #![allow(dead_code)]
 
 mod camera;
+mod color;
 mod config;
+mod image;
 mod math;
 mod objects;
 mod onb;
@@ -12,6 +14,7 @@ mod vector3;
 
 use camera::Camera;
 use config::Config;
+use image::{ImageBuffer, Pixel};
 use math::Onb;
 use scene::Scene;
 use vector3::Vector;
@@ -34,4 +37,6 @@ fn main() {
             },
         },
     };
+
+    let buffer = ImageBuffer::new(config.resolution);
 }
