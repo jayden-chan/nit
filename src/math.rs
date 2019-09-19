@@ -1,4 +1,6 @@
 use crate::Vector;
+
+use rand::prelude::*;
 use std::ops;
 
 // TODO: This function should be replaced with something less hacky
@@ -8,6 +10,19 @@ pub fn fast_inv_sqrt(x: f32) -> f32 {
     let j = 0x5F3759DF - (i >> 1);
     let y: f32 = unsafe { std::mem::transmute(j) };
     y * (1.5 - 0.5 * x * y * y)
+}
+
+pub fn random_in_unit_disk() -> Vector {
+    let mut rng = rand::thread_rng();
+    let mut p = 2.0 * Vector::new(rng.gen(), rng.gen(), 0.0)
+        - Vector::new(1.0, 1.0, 0.0);
+
+    while Vector::dot(p, p) >= 1.0 {
+        p = 2.0 * Vector::new(rng.gen(), rng.gen(), 0.0)
+            - Vector::new(1.0, 1.0, 0.0);
+    }
+
+    p
 }
 
 #[derive(Debug)]
@@ -47,12 +62,6 @@ impl Onb {
         axis[1] = Vector::cross(axis[2], a).normalize();
         axis[0] = Vector::cross(axis[2], axis[1]);
 
-        Self { axis }
-    }
-
-    // FIXME: DELETE THIS, TEMP ONLY
-    pub fn default() -> Self {
-        let axis = [Vector::zeros(); 3];
         Self { axis }
     }
 }

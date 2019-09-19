@@ -16,7 +16,7 @@ pub struct Pixel {
 }
 
 pub struct ImageBuffer {
-    buffer: Vec<Vec<Pixel>>,
+    pub buffer: Vec<Vec<Pixel>>,
 }
 
 impl ImageBuffer {
