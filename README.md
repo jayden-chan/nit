@@ -6,30 +6,26 @@ Yet Another Rust Raytracer
 
 Tentative plan for the program
 
-### Complete
-- [ ] Nothing yet :(
-
-### Planned
-#### Object Primitives
+### Object Primitives
 - [ ] Spheres
 - [ ] Rectangles
 - [ ] Triangles
 - [ ] Generic Polygons
 
-#### Materials
+### Materials
 - [ ] Lambertian
 - [ ] Metal
 - [ ] Glass
 - [ ] Glossy
 - [ ] Lights
 
-#### Tone Mapping
-- [ ] Clamp
+### Tone Mapping
+- [x] Clamp
 - [ ] Reinhard-Jodie
 - [ ] Filmic
 - [ ] Camera Response Functions
 
-#### General Features
+### General Features
 - [ ] Parallel Rendering (CPU)
 - [ ] Parallel Rendering (GPU)
 - [ ] Multi-machine distributed rendering
