@@ -1,3 +1,4 @@
+use crate::math::Onb;
 use crate::Vector;
 
 #[derive(Debug)]
@@ -7,9 +8,7 @@ pub struct Camera {
     pub vertical: Vector,
     pub origin: Vector,
     pub lens_radius: f32,
-    pub u: Vector,
-    pub v: Vector,
-    pub w: Vector,
+    pub uvw: Onb,
     pub t0: f32,
     pub t1: f32,
 }

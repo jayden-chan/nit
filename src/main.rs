@@ -1,12 +1,18 @@
+// FIXME: REMOVE THIS ONCE STUFF IS BROUGHT OVER FROM OLD TRACER
+#![allow(dead_code)]
+
 mod camera;
 mod config;
 mod math;
 mod objects;
+mod onb;
+mod ray;
 mod scene;
 mod vector3;
 
 use camera::Camera;
 use config::Config;
+use math::Onb;
 use scene::Scene;
 use vector3::Vector;
 
@@ -22,9 +28,7 @@ fn main() {
                 vertical: Vector::zeros(),
                 origin: Vector::zeros(),
                 lens_radius: 0.0,
-                u: Vector::zeros(),
-                v: Vector::zeros(),
-                w: Vector::zeros(),
+                uvw: Onb::default(),
                 t0: 0.0,
                 t1: 0.0,
             },
