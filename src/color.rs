@@ -23,8 +23,8 @@ fn clamp(buffer: &mut Vec<Vec<Pixel>>, max: f32) {
             if pixel.g > max {
                 pixel.g = max;
             }
-            if pixel.g > max {
-                pixel.g = max;
+            if pixel.b > max {
+                pixel.b = max;
             }
 
             // This shouldn't be possible but... just in case
@@ -34,8 +34,8 @@ fn clamp(buffer: &mut Vec<Vec<Pixel>>, max: f32) {
             if pixel.g < 0.0 {
                 pixel.g = 0.0;
             }
-            if pixel.g < 0.0 {
-                pixel.g = 0.0;
+            if pixel.b < 0.0 {
+                pixel.b = 0.0;
             }
         });
     });

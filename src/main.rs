@@ -37,6 +37,8 @@ fn main() -> Result<(), String> {
     };
 
     let buffer = ImageBuffer::new(config.resolution);
-
-    buffer.to_ppm(String::from("image.ppm"), ToneMappingOperator::Clamp(255.0))
+    buffer.to_ppm(
+        String::from("out/image.ppm"),
+        ToneMappingOperator::Clamp(255.0),
+    )
 }
