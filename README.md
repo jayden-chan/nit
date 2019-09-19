@@ -40,3 +40,4 @@ Tentative plan for the program
 - [ ] Spectral rays
 - [ ] BVH / k-d tree
 - [ ] Adaptive sampling
+- [ ] Russian Roulette loop termination
