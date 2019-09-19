@@ -23,6 +23,12 @@ Tentative plan for the program
 - [ ] Glossy
 - [ ] Lights
 
+#### Tone Mapping
+- [ ] Clamp
+- [ ] Reinhard-Jodie
+- [ ] Filmic
+- [ ] Camera Response Functions
+
 #### General Features
 - [ ] Parallel Rendering (CPU)
 - [ ] Parallel Rendering (GPU)
