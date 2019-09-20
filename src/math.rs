@@ -39,6 +39,22 @@ pub fn random_on_unit_sphere() -> Vector {
     random_in_unit_sphere().normalize()
 }
 
+pub fn vector_reflect(v: Vector, n: Vector) -> Vector {
+    v - 2.0 * Vector::dot(v, n) * n
+}
+
+pub fn vector_refract(v: Vector, n: Vector, ni_over_nt: f32) -> Option<Vector> {
+    let v = v.normalize();
+    let dt = Vector::dot(v, n);
+    let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
+
+    if discriminant > 0.0 {
+        Some(ni_over_nt * (v - n * dt) - n * discriminant.sqrt())
+    } else {
+        None
+    }
+}
+
 #[derive(Debug)]
 pub struct Onb {
     axis: [Vector; 3],

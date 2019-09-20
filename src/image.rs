@@ -72,9 +72,9 @@ impl ImageBuffer {
                 self.buffer.iter().for_each(|row| {
                     assert!(row.len() == width);
                     row.iter().for_each(|pixel| {
-                        img_buffer.push(pixel.r as u8);
-                        img_buffer.push(pixel.g as u8);
-                        img_buffer.push(pixel.b as u8);
+                        img_buffer.push((pixel.r.sqrt() * 255.0) as u8);
+                        img_buffer.push((pixel.g.sqrt() * 255.0) as u8);
+                        img_buffer.push((pixel.b.sqrt() * 255.0) as u8);
                     })
                 });
 

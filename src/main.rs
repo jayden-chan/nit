@@ -18,7 +18,7 @@ use crate::{
     color::ToneMappingOperator,
     config::Config,
     image::ImageBuffer,
-    materials::{Diffuse, Light},
+    materials::{Dielectric, Diffuse, Light, Reflector},
     objects::HittableList,
     objects::Sphere,
     scene::Scene,
@@ -34,9 +34,7 @@ fn main() -> Result<(), String> {
                 Box::new(Sphere::new(
                     Vector::new(0.0, 1.0, 0.0),
                     1.0,
-                    Diffuse {
-                        albedo: Vector::new(0.9, 0.2, 0.2),
-                    },
+                    Dielectric { ref_idx: 1.52 },
                 )),
                 Box::new(Sphere::new(
                     Vector::new(0.0, -500.0, 0.0),
@@ -46,10 +44,10 @@ fn main() -> Result<(), String> {
                     },
                 )),
                 Box::new(Sphere::new(
-                    Vector::new(10.0, 14.0, -7.0),
+                    Vector::new(10.0, 14.0, 7.0),
                     4.0,
                     Light {
-                        emittance: Vector::new(15.0, 15.0, 15.0) * 255.0,
+                        emittance: Vector::new(15.0, 15.0, 15.0),
                     },
                 )),
             ]),
@@ -63,6 +61,6 @@ fn main() -> Result<(), String> {
 
     buffer.to_ppm(
         String::from("out/image.ppm"),
-        ToneMappingOperator::Clamp(255.0),
+        ToneMappingOperator::Clamp(1.0),
     )
 }
