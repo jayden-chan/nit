@@ -2,8 +2,11 @@ use rand::prelude::*;
 use rayon::prelude::*;
 
 use crate::{
-    config::Config, image::ImageBuffer, materials::Material, objects::Hittable,
-    ray::Ray, scene::Scene, Vector,
+    config::{Config, Scene},
+    image::ImageBuffer,
+    objects::Hittable,
+    ray::Ray,
+    Vector,
 };
 
 use std::f32;
@@ -49,7 +52,7 @@ pub fn trace(r: Ray, scene: &Scene) -> Vector {
             None => return Vector::zeros(),
             Some(hit) => {
                 let scattered = hit.material.scatter(curr_ray, hit);
-                let emitted = hit.material.emitted();
+                let emitted = hit.material.emitted(curr_ray, hit);
 
                 match scattered {
                     None => return curr_att * (total_emitted + emitted),

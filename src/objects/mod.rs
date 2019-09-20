@@ -2,11 +2,14 @@ use std::fmt::Debug;
 
 use crate::{materials::Material, ray::Ray, Vector};
 
-mod sphere;
-pub use sphere::*;
-
 mod hittable_list;
 pub use hittable_list::*;
+
+mod rectangle;
+pub use rectangle::*;
+
+mod sphere;
+pub use sphere::*;
 
 /// Describes an interaction between an incoming [`Ray`]
 /// and an object.

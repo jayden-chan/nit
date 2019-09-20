@@ -24,7 +24,7 @@ pub trait Material: Debug + Send + Sync {
         None
     }
 
-    fn emitted(&self) -> Vector {
+    fn emitted(&self, r: Ray, hit: Hit) -> Vector {
         Vector::zeros()
     }
 }
