@@ -18,7 +18,6 @@ pub struct Config {
     pub scene: Scene,
 }
 
-/// Red ball to test with gray floor
 pub fn config_test_ball() -> Config {
     Config {
         resolution: (480, 480),
@@ -56,9 +55,10 @@ pub fn config_cornell_box() -> Config {
     let green = Vector::new(0.12, 0.45, 0.15);
     let red = Vector::new(0.65, 0.05, 0.05);
     let white = Vector::new(0.73, 0.73, 0.73);
+
     Config {
-        resolution: (480, 480),
-        samples: 400,
+        resolution: (500, 500),
+        samples: 1000,
         scene: Scene {
             objects: HittableList::new(vec![
                 Box::new(Rectangle::<Diffuse, { RectPlane::YZ }> {

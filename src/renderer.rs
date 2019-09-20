@@ -10,14 +10,19 @@ use crate::{
 };
 
 use std::f32;
+use std::io::stdout;
+use std::io::Write;
 
 const T_MIN: f32 = 0.0005;
 const MAX_RECURSIVE_DEPTH: usize = 50;
 
 pub fn render(image: &mut ImageBuffer, config: Config) {
     let (width, height) = config.resolution;
+    let mut done_rows = 0;
 
     image.buffer.iter_mut().for_each(|row| {
+        progress_bar(done_rows, height);
+
         row.par_iter_mut().for_each(|pixel| {
             let mut curr_pixel = Vector::zeros();
             let mut rng = rand::thread_rng();
@@ -37,7 +42,12 @@ pub fn render(image: &mut ImageBuffer, config: Config) {
             pixel.g = curr_pixel.y;
             pixel.b = curr_pixel.z;
         });
+
+        done_rows += 1;
     });
+
+    // Make sure the progress bar reaches 100% :)
+    progress_bar(height, height);
 }
 
 pub fn trace(r: Ray, scene: &Scene) -> Vector {
@@ -68,4 +78,20 @@ pub fn trace(r: Ray, scene: &Scene) -> Vector {
 
     // Loop broke - max recursive depth exceeded
     Vector::zeros()
+}
+
+/// Renders a progress bar on the command line
+fn progress_bar(curr: usize, total: usize) {
+    let done_chars = (curr as f32 / total as f32) * 80 as f32;
+    let blank_chars = 80 - done_chars as usize;
+
+    print!(
+        "    {:10} [{}{}] {:.2}%\r",
+        "Rendering",
+        "=".repeat(done_chars as usize),
+        " ".repeat(blank_chars),
+        (curr as f32 / total as f32) * 100.0
+    );
+
+    stdout().flush().unwrap();
 }
