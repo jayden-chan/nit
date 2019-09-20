@@ -7,17 +7,17 @@ Yet Another Rust Raytracer
 Tentative plan for the program
 
 ### Object Primitives
-- [ ] Spheres
-- [ ] Rectangles
+- [x] Spheres
+- [x] Rectangles
 - [ ] Triangles
 - [ ] Generic Polygons
 
 ### Materials
-- [ ] Lambertian
-- [ ] Metal
-- [ ] Glass
+- [x] Lambertian
+- [x] Metal
+- [x] Glass
 - [ ] Glossy
-- [ ] Lights
+- [x] Lights
 
 ### Tone Mapping
 - [x] Clamp
@@ -26,7 +26,7 @@ Tentative plan for the program
 - [ ] Camera Response Functions
 
 ### General Features
-- [ ] Parallel Rendering (CPU)
+- [x] Parallel Rendering (CPU)
 - [ ] Parallel Rendering (GPU)
 - [ ] Multi-machine distributed rendering
 - [ ] .obj File loading

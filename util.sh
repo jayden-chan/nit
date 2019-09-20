@@ -35,21 +35,21 @@ case $1 in
         ;;
     iter)
         make build \
-        && ./target/release/raytracer $2 out/image.ppm \
+        && ./target/release/yarr $2 out/image.ppm \
         && feh --auto-zoom --force-aliasing out/image.ppm
         ;;
     connect)
         ssh -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP
         ;;
     download)
-        scp -i ~/.ssh/gcp_ssh -r jayden@$GCP_VM_IP:/home/jayden/raytracer/$2 ./$2
+        scp -i ~/.ssh/gcp_ssh -r jayden@$GCP_VM_IP:/home/jayden/yarr/$2 ./$2
         ;;
     download-img)
-        scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/raytracer/out/image.ppm ./out/image.ppm
+        scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/yarr/out/image.ppm ./out/image.ppm
         feh --auto-zoom --force-aliasing out/image.ppm
         ;;
     download-ani)
-        scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/raytracer/out/output.avi ./out/output.avi
+        scp -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP:/home/jayden/yarr/out/output.avi ./out/output.avi
         xdg-open out/output.avi
         ;;
     convert)
@@ -64,7 +64,7 @@ case $1 in
         node scripts/animation_1.js
 
         for f in $(ls scenes/animation/); do
-            ./target/release/raytracer "./scenes/animation/$f" "out/$f.ppm"
+            ./target/release/yarr "./scenes/animation/$f" "out/$f.ppm"
         done
 
         ffmpeg -pattern_type glob -framerate 25 -i "out/*.ppm" -c:v libx264 -crf 25 -b:v 40M -pix_fmt yuv420p "out/animation_1.mp4"
