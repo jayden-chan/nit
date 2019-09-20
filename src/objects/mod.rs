@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::{ray::Ray, Vector};
+use crate::{materials::Material, ray::Ray, Vector};
 
 mod sphere;
 pub use sphere::*;
@@ -13,7 +13,7 @@ pub use hittable_list::*;
 ///
 /// [`Ray`]: struct.Ray.html
 #[derive(Debug, Copy, Clone)]
-pub struct Hit {
+pub struct Hit<'a> {
     pub u: f32,
     pub v: f32,
     /// The point t along the ray where the intersection occurs
@@ -22,6 +22,8 @@ pub struct Hit {
     pub p: Vector,
     /// The intersection surface normal
     pub normal: Vector,
+    /// The material that was hit
+    pub material: &'a dyn Material,
 }
 
 pub trait Hittable: Debug + Send + Sync {

@@ -1,17 +1,22 @@
 //! A simple Sphere object
 
-use super::{Hit, Hittable};
-use crate::{ray::Ray, Vector};
+use crate::{
+    materials::Material,
+    objects::{Hit, Hittable},
+    ray::Ray,
+    Vector,
+};
 
 use std::f32::consts::PI;
 
 #[derive(Debug)]
-pub struct Sphere {
+pub struct Sphere<M: Material> {
     center: Vector,
     radius: f32,
+    material: M,
 }
 
-impl Hittable for Sphere {
+impl<M: Material> Hittable for Sphere<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let oc = r.origin - self.center;
 
@@ -38,6 +43,7 @@ impl Hittable for Sphere {
                     t: q_eq,
                     p: point_at_parameter,
                     normal: (point_at_parameter - self.center) / self.radius,
+                    material: &self.material,
                 });
             }
         }
@@ -46,9 +52,13 @@ impl Hittable for Sphere {
     }
 }
 
-impl Sphere {
-    pub fn new(center: Vector, radius: f32) -> Self {
-        Self { center, radius }
+impl<M: Material> Sphere<M> {
+    pub fn new(center: Vector, radius: f32, material: M) -> Self {
+        Self {
+            center,
+            radius,
+            material,
+        }
     }
 }
 

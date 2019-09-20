@@ -1,4 +1,4 @@
-all: build run-debug
+all: build run open
 build: build-skylake
 
 build-general:

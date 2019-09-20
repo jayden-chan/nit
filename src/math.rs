@@ -25,6 +25,20 @@ pub fn random_in_unit_disk() -> Vector {
     p
 }
 
+pub fn random_in_unit_sphere() -> Vector {
+    let mut p = 2.0 * Vector::rand() - Vector::ones();
+
+    while Vector::dot(p, p) >= 1.0 {
+        p = 2.0 * Vector::rand() - Vector::ones();
+    }
+
+    p
+}
+
+pub fn random_on_unit_sphere() -> Vector {
+    random_in_unit_sphere().normalize()
+}
+
 #[derive(Debug)]
 pub struct Onb {
     axis: [Vector; 3],

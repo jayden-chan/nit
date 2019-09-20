@@ -5,28 +5,54 @@ mod camera;
 mod color;
 mod config;
 mod image;
+mod materials;
 mod math;
 mod objects;
-mod onb;
 mod ray;
 mod renderer;
 mod scene;
 mod vector3;
 
 use crate::{
-    camera::Camera, color::ToneMappingOperator, config::Config,
-    image::ImageBuffer, objects::HittableList, scene::Scene, vector3::Vector,
+    camera::Camera,
+    color::ToneMappingOperator,
+    config::Config,
+    image::ImageBuffer,
+    materials::{Diffuse, Light},
+    objects::HittableList,
+    objects::Sphere,
+    scene::Scene,
+    vector3::Vector,
 };
 
 fn main() -> Result<(), String> {
     let config = Config {
-        resolution: (300, 300),
-        samples: 1,
+        resolution: (480, 480),
+        samples: 400,
         scene: Scene {
-            objects: HittableList::new(vec![Box::new(objects::Sphere::new(
-                Vector::zeros(),
-                1.0,
-            ))]),
+            objects: HittableList::new(vec![
+                Box::new(Sphere::new(
+                    Vector::new(0.0, 1.0, 0.0),
+                    1.0,
+                    Diffuse {
+                        albedo: Vector::new(0.9, 0.2, 0.2),
+                    },
+                )),
+                Box::new(Sphere::new(
+                    Vector::new(0.0, -500.0, 0.0),
+                    500.0,
+                    Diffuse {
+                        albedo: Vector::new(0.3, 0.3, 0.3),
+                    },
+                )),
+                Box::new(Sphere::new(
+                    Vector::new(10.0, 14.0, -7.0),
+                    4.0,
+                    Light {
+                        emittance: Vector::new(15.0, 15.0, 15.0) * 255.0,
+                    },
+                )),
+            ]),
             camera: Camera::default(1.0),
         },
     };

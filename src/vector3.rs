@@ -194,6 +194,15 @@ impl ops::MulAssign<f32> for Vector {
     }
 }
 
+/// Multiply-asign each element of a vector by a float
+impl ops::MulAssign<Vector> for Vector {
+    fn mul_assign(&mut self, rhs: Vector) {
+        self.x *= rhs.x;
+        self.y *= rhs.y;
+        self.z *= rhs.z;
+    }
+}
+
 /// Divide all fields by a float
 impl ops::Div<f32> for Vector {
     type Output = Vector;

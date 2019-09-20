@@ -2,13 +2,14 @@ use rand::prelude::*;
 use rayon::prelude::*;
 
 use crate::{
-    config::Config, image::ImageBuffer, objects::Hittable, ray::Ray,
-    scene::Scene, Vector,
+    config::Config, image::ImageBuffer, materials::Material, objects::Hittable,
+    ray::Ray, scene::Scene, Vector,
 };
 
 use std::f32;
 
-const T_MIN: f32 = 0.0001;
+const T_MIN: f32 = 0.0005;
+const MAX_RECURSIVE_DEPTH: usize = 50;
 
 pub fn render(image: &mut ImageBuffer, config: Config) {
     let (width, height) = config.resolution;
@@ -37,29 +38,31 @@ pub fn render(image: &mut ImageBuffer, config: Config) {
 }
 
 pub fn trace(r: Ray, scene: &Scene) -> Vector {
-    let mut rng = rand::thread_rng();
+    let mut curr_ray = r;
+    let mut curr_att = Vector::ones();
+    let mut total_emitted = Vector::zeros();
 
-    loop {
-        let hit_result = scene.objects.hit(r, T_MIN, f32::MAX);
+    for _ in 0..MAX_RECURSIVE_DEPTH {
+        let hit_result = scene.objects.hit(curr_ray, T_MIN, f32::MAX);
 
-        if hit_result.is_none() {
-            return Vector::new(255.0, 255.0, 255.0);
+        match hit_result {
+            None => return Vector::zeros(),
+            Some(hit) => {
+                let scattered = hit.material.scatter(curr_ray, hit);
+                let emitted = hit.material.emitted();
+
+                match scattered {
+                    None => return curr_att * (total_emitted + emitted),
+                    Some(scatter) => {
+                        curr_ray = scatter.specular;
+                        curr_att *= scatter.attenuation;
+                        total_emitted += emitted;
+                    }
+                }
+            }
         }
-
-        let hit = hit_result.unwrap();
-
-        return 0.5
-            * 255.0
-            * Vector::new(
-                hit.normal.x + 1.0,
-                hit.normal.y + 1.0,
-                hit.normal.z + 1.0,
-            );
-
-        // if rng.gen() {
-        //     break;
-        // }
     }
 
+    // Loop broke - max recursive depth exceeded
     Vector::zeros()
 }

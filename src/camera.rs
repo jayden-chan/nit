@@ -53,7 +53,7 @@ impl Camera {
     pub fn default(aspect_r: f32) -> Self {
         let defaults = CameraConstructor {
             look_at: Vector::zeros(),
-            look_from: Vector::new(0.0, 0.0, 10.0),
+            look_from: Vector::new(0.0, 3.0, 7.0),
             vup: Vector::new(0.0, 1.0, 0.0),
             vfov: 45.0,
             aspect_r,
