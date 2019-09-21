@@ -6,7 +6,7 @@ use crate::{
     Vector,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Diffuse {
     pub albedo: Vector,
 }

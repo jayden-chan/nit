@@ -1,6 +1,6 @@
 use crate::{materials::Material, objects::Hit, ray::Ray, Vector};
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Light {
     pub emittance: Vector,
 }
