@@ -84,16 +84,16 @@ impl Vector {
     }
 
     /// Compute the dot product of two vectors
-    pub fn dot(lhs: Vector, rhs: Vector) -> f32 {
-        lhs.x * rhs.x + lhs.y * rhs.y + lhs.z * rhs.z
+    pub fn dot(self, rhs: Vector) -> f32 {
+        self.x * rhs.x + self.y * rhs.y + self.z * rhs.z
     }
 
     /// Compute the cross product of two vectors
-    pub fn cross(lhs: Vector, rhs: Vector) -> Self {
+    pub fn cross(self, rhs: Vector) -> Self {
         Self {
-            x: lhs.y * rhs.z - lhs.z * rhs.y,
-            y: lhs.z * rhs.x - lhs.x * rhs.z,
-            z: lhs.x * rhs.y - lhs.y * rhs.x,
+            x: self.y * rhs.z - self.z * rhs.y,
+            y: self.z * rhs.x - self.x * rhs.z,
+            z: self.x * rhs.y - self.y * rhs.x,
         }
     }
 }

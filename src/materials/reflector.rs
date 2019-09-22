@@ -20,7 +20,7 @@ impl Material for Reflector {
             dir: reflected,
         };
 
-        if Vector::dot(specular.dir, hit.normal) > 0.0 {
+        if specular.dir.dot(hit.normal) > 0.0 {
             Some(Scatter {
                 specular,
                 attenuation: self.albedo,

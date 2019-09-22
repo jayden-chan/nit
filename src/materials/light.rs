@@ -7,7 +7,7 @@ pub struct Light {
 
 impl Material for Light {
     fn emitted(&self, r: Ray, hit: Hit) -> Vector {
-        if Vector::dot(hit.normal, r.dir) < 0.0 {
+        if hit.normal.dot(r.dir) < 0.0 {
             self.emittance
         } else {
             Vector::zeros()

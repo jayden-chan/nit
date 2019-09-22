@@ -27,6 +27,7 @@ impl<H: Hittable, const A: RotationAxis> Hittable for Rotate<H, { A }> {
         let mut origin = r.origin;
         let mut dir = r.dir;
 
+        // This is some ugly math but it is what it is
         origin[b_axis] = self.cos_theta * r.origin[b_axis]
             - self.sin_theta * r.origin[a_axis];
         origin[a_axis] = self.sin_theta * r.origin[b_axis]

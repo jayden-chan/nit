@@ -20,9 +20,9 @@ impl<M: Material> Hittable for Sphere<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let oc = r.origin - self.center;
 
-        let a = Vector::dot(r.dir, r.dir);
-        let b = Vector::dot(oc, r.dir);
-        let c = Vector::dot(oc, oc) - self.radius * self.radius;
+        let a = r.dir.dot(r.dir);
+        let b = oc.dot(r.dir);
+        let c = oc.dot(oc) - self.radius * self.radius;
         let discriminant = b * b - a * c;
 
         if discriminant > 0.0 {
