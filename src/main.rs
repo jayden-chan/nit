@@ -1,9 +1,7 @@
 #![feature(const_generics)]
 
-// FIXME: REMOVE THIS ONCE STUFF IS BROUGHT OVER FROM OLD TRACER
-// #![allow(dead_code)]
-
 mod aabb;
+mod bvh;
 mod camera;
 mod color;
 mod config;

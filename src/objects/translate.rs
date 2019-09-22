@@ -1,5 +1,5 @@
 use super::{Hit, Hittable};
-use crate::{ray::Ray, Vector};
+use crate::{aabb::Aabb, ray::Ray, Vector};
 
 #[derive(Debug, Copy, Clone)]
 pub struct Translate<H: Hittable> {
@@ -20,5 +20,13 @@ impl<H: Hittable> Hittable for Translate<H> {
                 hit_record.p += self.offset;
                 hit_record
             })
+    }
+
+    fn bounding_box(&self, t0: f32, t1: f32) -> Option<Aabb> {
+        self.hittable.bounding_box(t0, t1).map(|mut aabb| {
+            aabb.min += self.offset;
+            aabb.max += self.offset;
+            aabb
+        })
     }
 }

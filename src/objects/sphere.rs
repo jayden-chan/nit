@@ -1,6 +1,7 @@
 //! A simple Sphere object
 
 use crate::{
+    aabb::Aabb,
     materials::Material,
     objects::{Hit, Hittable},
     ray::Ray,
@@ -50,6 +51,13 @@ impl<M: Material> Hittable for Sphere<M> {
 
         None
     }
+
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+        Some(Aabb::new(
+            self.center - Vector::new(self.radius, self.radius, self.radius),
+            self.center + Vector::new(self.radius, self.radius, self.radius),
+        ))
+    }
 }
 
 impl<M: Material> Sphere<M> {
@@ -63,7 +71,7 @@ impl<M: Material> Sphere<M> {
 }
 
 /// Computes the u and v values for a sphere
-pub fn sphere_uv(p: Vector) -> (f32, f32) {
+fn sphere_uv(p: Vector) -> (f32, f32) {
     let phi = f32::atan2(p.z, p.x);
     let theta = f32::asin(p.y);
     ((1.0 - (phi + PI) / (2.0 * PI)), ((theta + PI / 2.0) / PI))

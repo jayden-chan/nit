@@ -1,5 +1,5 @@
 use super::{Hit, Hittable};
-use crate::{materials::Material, ray::Ray, Vector};
+use crate::{aabb::Aabb, materials::Material, ray::Ray, Vector};
 
 pub enum RectPlane {
     XY,
@@ -52,5 +52,22 @@ impl<M: Material, const P: RectPlane> Hittable for Rectangle<M, { P }> {
             normal: normal * self.norm,
             material: &self.material,
         })
+    }
+
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+        match P {
+            RectPlane::XY => Some(Aabb::new(
+                Vector::new(self.a0, self.b0, self.k - 0.0001),
+                Vector::new(self.a0, self.b0, self.k + 0.0001),
+            )),
+            RectPlane::YZ => Some(Aabb::new(
+                Vector::new(self.k - 0.0001, self.a0, self.b0),
+                Vector::new(self.k + 0.0001, self.a0, self.b0),
+            )),
+            RectPlane::XZ => Some(Aabb::new(
+                Vector::new(self.a0, self.k - 0.0001, self.b0),
+                Vector::new(self.a0, self.k + 0.0001, self.b0),
+            )),
+        }
     }
 }

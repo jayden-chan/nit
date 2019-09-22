@@ -13,6 +13,10 @@ impl<M: Material> Hittable for Block<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         self.sides.hit(r, t_min, t_max)
     }
+
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+        Some(Aabb::new(self.p_min, self.p_max))
+    }
 }
 
 impl<M> Block<M>
