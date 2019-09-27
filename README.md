@@ -1,6 +1,6 @@
-# YARR
+# Nit
 
-Yet Another Rust Raytracer
+Nit is a path tracing renderer built with Rust
 
 ## Project Roadmap
 

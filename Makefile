@@ -11,10 +11,10 @@ gen:
 	./util.sh gen
 
 run:
-	./target/release/yarr
+	./target/release/nit
 
 run-debug:
-	./target/debug/yarr
+	./target/debug/nit
 
 open:
 	feh --auto-zoom --force-aliasing out/image.ppm

@@ -397,7 +397,7 @@ version = "0.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
-name = "yarr"
+name = "nit"
 version = "0.1.0"
 dependencies = [
  "image 0.22.2 (registry+https://github.com/rust-lang/crates.io-index)",
