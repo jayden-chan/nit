@@ -1,6 +1,7 @@
 //! A simple Sphere object
 
 use crate::{
+    aabb::Aabb,
     materials::Material,
     objects::{Hit, Hittable},
     ray::Ray,
@@ -20,9 +21,9 @@ impl<M: Material> Hittable for Sphere<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let oc = r.origin - self.center;
 
-        let a = Vector::dot(r.dir, r.dir);
-        let b = Vector::dot(oc, r.dir);
-        let c = Vector::dot(oc, oc) - self.radius * self.radius;
+        let a = r.dir.dot(r.dir);
+        let b = oc.dot(r.dir);
+        let c = oc.dot(oc) - self.radius * self.radius;
         let discriminant = b * b - a * c;
 
         if discriminant > 0.0 {
@@ -50,6 +51,13 @@ impl<M: Material> Hittable for Sphere<M> {
 
         None
     }
+
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+        Some(Aabb::new(
+            self.center - Vector::new(self.radius, self.radius, self.radius),
+            self.center + Vector::new(self.radius, self.radius, self.radius),
+        ))
+    }
 }
 
 impl<M: Material> Sphere<M> {
@@ -63,7 +71,7 @@ impl<M: Material> Sphere<M> {
 }
 
 /// Computes the u and v values for a sphere
-pub fn sphere_uv(p: Vector) -> (f32, f32) {
+fn sphere_uv(p: Vector) -> (f32, f32) {
     let phi = f32::atan2(p.z, p.x);
     let theta = f32::asin(p.y);
     ((1.0 - (phi + PI) / (2.0 * PI)), ((theta + PI / 2.0) / PI))

@@ -33,19 +33,19 @@ impl Material for Dielectric {
         let reflected = vector_reflect(r_in.dir, hit_record.normal);
 
         let (outward_normal, ni_over_nt, cosine) =
-            if Vector::dot(r_in.dir, hit_record.normal) > 0.0 {
+            if r_in.dir.dot(hit_record.normal) > 0.0 {
                 (
                     -hit_record.normal,
                     self.ref_idx,
                     self.ref_idx
-                        * Vector::dot(r_in.dir, hit_record.normal)
+                        * r_in.dir.dot(hit_record.normal)
                         * r_in.dir.inv_mag(),
                 )
             } else {
                 (
                     hit_record.normal,
                     1.0 / self.ref_idx,
-                    -Vector::dot(r_in.dir, hit_record.normal)
+                    -r_in.dir.dot(hit_record.normal)
                         * r_in.dir.inv_mag(),
                 )
             };

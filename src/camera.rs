@@ -32,8 +32,8 @@ impl Camera {
         let half_width = vals.aspect_r * half_height;
 
         let w = (vals.look_from - vals.look_at).normalize();
-        let u = Vector::cross(vals.vup, w).normalize();
-        let v = Vector::cross(w, u);
+        let u = vals.vup.cross(w).normalize();
+        let v = w.cross(u);
 
         Self {
             u,

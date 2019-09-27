@@ -1,7 +1,10 @@
 use crate::{
     camera::{Camera, CameraConstructor},
     materials::{Diffuse, Light},
-    objects::{HittableList, RectPlane, Rectangle, Sphere},
+    objects::{
+        Block, HittableList, RectPlane, Rectangle, Rotate, RotationAxis,
+        Sphere, Translate,
+    },
     vector3::Vector,
 };
 
@@ -57,8 +60,8 @@ pub fn config_cornell_box() -> Config {
     let white = Vector::new(0.73, 0.73, 0.73);
 
     Config {
-        resolution: (500, 500),
-        samples: 1000,
+        resolution: (400, 400),
+        samples: 500,
         scene: Scene {
             objects: HittableList::new(vec![
                 Box::new(Rectangle::<Diffuse, { RectPlane::YZ }> {
@@ -116,6 +119,34 @@ pub fn config_cornell_box() -> Config {
                     k: 555.0,
                     norm: -1.0,
                     material: Diffuse { albedo: white },
+                }),
+                Box::new(Translate {
+                    offset: Vector::new(130.0, 0.0, 65.0),
+                    hittable:
+                        Rotate::<Block<Diffuse>, { RotationAxis::Y }>::new(
+                            Block::new(
+                                Vector::zeros(),
+                                Vector::new(165.0, 165.0, 165.0),
+                                Diffuse {
+                                    albedo: Vector::new(0.73, 0.73, 0.73),
+                                },
+                            ),
+                            -18.0,
+                        ),
+                }),
+                Box::new(Translate {
+                    offset: Vector::new(265.0, 0.0, 295.0),
+                    hittable:
+                        Rotate::<Block<Diffuse>, { RotationAxis::Y }>::new(
+                            Block::new(
+                                Vector::zeros(),
+                                Vector::new(165.0, 330.0, 165.0),
+                                Diffuse {
+                                    albedo: Vector::new(0.73, 0.73, 0.73),
+                                },
+                            ),
+                            15.0,
+                        ),
                 }),
             ]),
             camera: Camera::new(CameraConstructor {

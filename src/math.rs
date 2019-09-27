@@ -17,7 +17,7 @@ pub fn random_in_unit_disk() -> Vector {
     let mut p = 2.0 * Vector::new(rng.gen(), rng.gen(), 0.0)
         - Vector::new(1.0, 1.0, 0.0);
 
-    while Vector::dot(p, p) >= 1.0 {
+    while p.dot(p) >= 1.0 {
         p = 2.0 * Vector::new(rng.gen(), rng.gen(), 0.0)
             - Vector::new(1.0, 1.0, 0.0);
     }
@@ -28,7 +28,7 @@ pub fn random_in_unit_disk() -> Vector {
 pub fn random_in_unit_sphere() -> Vector {
     let mut p = 2.0 * Vector::rand() - Vector::ones();
 
-    while Vector::dot(p, p) >= 1.0 {
+    while p.dot(p) >= 1.0 {
         p = 2.0 * Vector::rand() - Vector::ones();
     }
 
@@ -40,12 +40,12 @@ pub fn random_on_unit_sphere() -> Vector {
 }
 
 pub fn vector_reflect(v: Vector, n: Vector) -> Vector {
-    v - 2.0 * Vector::dot(v, n) * n
+    v - 2.0 * v.dot(n) * n
 }
 
 pub fn vector_refract(v: Vector, n: Vector, ni_over_nt: f32) -> Option<Vector> {
     let v = v.normalize();
-    let dt = Vector::dot(v, n);
+    let dt = v.dot(n);
     let discriminant = 1.0 - ni_over_nt * ni_over_nt * (1.0 - dt * dt);
 
     if discriminant > 0.0 {
@@ -89,8 +89,8 @@ impl Onb {
             Vector::new(1.0, 0.0, 0.0)
         };
 
-        axis[1] = Vector::cross(axis[2], a).normalize();
-        axis[0] = Vector::cross(axis[2], axis[1]);
+        axis[1] = axis[2].cross(a).normalize();
+        axis[0] = axis[2].cross(axis[1]);
 
         Self { axis }
     }

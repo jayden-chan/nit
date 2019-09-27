@@ -6,13 +6,13 @@ use crate::{
     Vector,
 };
 
-#[derive(Debug)]
+#[derive(Debug, Copy, Clone)]
 pub struct Diffuse {
     pub albedo: Vector,
 }
 
 impl Material for Diffuse {
-    fn scatter(&self, r: Ray, hit: Hit) -> Option<Scatter> {
+    fn scatter(&self, _r: Ray, hit: Hit) -> Option<Scatter> {
         let scattered = hit.p + hit.normal + random_on_unit_sphere();
 
         let specular = Ray {

@@ -1,6 +1,9 @@
 use std::fmt::Debug;
 
-use crate::{materials::Material, ray::Ray, Vector};
+use crate::{aabb::Aabb, materials::Material, ray::Ray, Vector};
+
+mod block;
+pub use block::*;
 
 mod hittable_list;
 pub use hittable_list::*;
@@ -8,8 +11,14 @@ pub use hittable_list::*;
 mod rectangle;
 pub use rectangle::*;
 
+mod rotate;
+pub use rotate::*;
+
 mod sphere;
 pub use sphere::*;
+
+mod translate;
+pub use translate::*;
 
 /// Describes an interaction between an incoming [`Ray`]
 /// and an object.
@@ -30,7 +39,6 @@ pub struct Hit<'a> {
 }
 
 pub trait Hittable: Debug + Send + Sync {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
-        None
-    }
+    fn hit(&self, _r: Ray, _t_min: f32, _t_max: f32) -> Option<Hit>;
+    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb>;
 }

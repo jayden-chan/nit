@@ -20,11 +20,9 @@ pub struct Scatter {
 }
 
 pub trait Material: Debug + Send + Sync {
-    fn scatter(&self, r: Ray, hit: Hit) -> Option<Scatter> {
-        None
-    }
+    fn scatter(&self, _r: Ray, _hit: Hit) -> Option<Scatter>;
 
-    fn emitted(&self, r: Ray, hit: Hit) -> Vector {
+    fn emitted(&self, _r: Ray, _hit: Hit) -> Vector {
         Vector::zeros()
     }
 }
