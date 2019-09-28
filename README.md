@@ -2,6 +2,8 @@
 
 Nit is a path tracing renderer built with Rust
 
+![](https://i.imgur.com/UoDefoN.png "Cornell Box")
+
 ## Project Roadmap
 
 Tentative plan for the program
