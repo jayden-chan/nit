@@ -36,6 +36,7 @@ Tentative plan for the program
 - [ ] MLT
 - [ ] Importance Sampling
 - [ ] Spectral rays
-- [ ] BVH / k-d tree
+- [x] BVH
+- [ ] k-d tree
 - [ ] Adaptive sampling
 - [ ] Russian Roulette loop termination
