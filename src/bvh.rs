@@ -26,7 +26,7 @@ impl Hittable for Bvh {
                 (Some(rec), None) | (None, Some(rec)) => Some(rec),
                 (Some(rec_l), Some(rec_r)) => {
                     if rec_l.t < rec_r.t {
-                        Some(rec_r)
+                        Some(rec_l)
                     } else {
                         Some(rec_r)
                     }
@@ -37,7 +37,7 @@ impl Hittable for Bvh {
         None
     }
 
-    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+    fn bounding_box(&self) -> Option<Aabb> {
         Some(self.bounding_box)
     }
 }
@@ -52,16 +52,10 @@ fn sort_by_axis<const A: SortAxis>(
     a: &Box<dyn Hittable>,
     b: &Box<dyn Hittable>,
 ) -> Ordering {
-    let box_left = a.bounding_box(0.0, 0.0).unwrap();
-    let box_right = b.bounding_box(0.0, 0.0).unwrap();
+    let box_left = a.bounding_box().unwrap();
+    let box_right = b.bounding_box().unwrap();
 
-    let idx = match A {
-        SortAxis::X => 0,
-        SortAxis::Y => 1,
-        SortAxis::Z => 2,
-    };
-
-    if box_left.min[idx] - box_right.min[idx] < 0.0 {
+    if box_left.min[A as usize] - box_right.min[A as usize] < 0.0 {
         Ordering::Less
     } else {
         Ordering::Greater
@@ -71,8 +65,6 @@ fn sort_by_axis<const A: SortAxis>(
 impl Bvh {
     pub fn construct(
         objects: &mut Vec<Box<dyn Hittable>>,
-        t0: f32,
-        t1: f32,
     ) -> Box<dyn Hittable> {
         let axis = (3.0 * random::<f32>()) as u32;
 
@@ -94,11 +86,11 @@ impl Bvh {
             l => {
                 let l_vec = objects;
                 let mut r_vec = l_vec.split_off(l / 2);
-                let left = Self::construct(l_vec, t0, t1);
-                let right = Self::construct(&mut r_vec, t0, t1);
+                let left = Self::construct(l_vec);
+                let right = Self::construct(&mut r_vec);
 
-                let box_left = left.bounding_box(t0, t1).unwrap();
-                let box_right = right.bounding_box(t0, t1).unwrap();
+                let box_left = left.bounding_box().unwrap();
+                let box_right = right.bounding_box().unwrap();
 
                 let bounding_box = Aabb::surrounding_box(box_left, box_right);
                 Box::new(Self {

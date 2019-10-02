@@ -54,19 +54,19 @@ impl<M: Material, const P: RectPlane> Hittable for Rectangle<M, { P }> {
         })
     }
 
-    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+    fn bounding_box(&self) -> Option<Aabb> {
         match P {
             RectPlane::XY => Some(Aabb::new(
                 Vector::new(self.a0, self.b0, self.k - 0.0001),
-                Vector::new(self.a0, self.b0, self.k + 0.0001),
+                Vector::new(self.a1, self.b1, self.k + 0.0001),
             )),
             RectPlane::YZ => Some(Aabb::new(
                 Vector::new(self.k - 0.0001, self.a0, self.b0),
-                Vector::new(self.k + 0.0001, self.a0, self.b0),
+                Vector::new(self.k + 0.0001, self.a1, self.b1),
             )),
             RectPlane::XZ => Some(Aabb::new(
                 Vector::new(self.a0, self.k - 0.0001, self.b0),
-                Vector::new(self.a0, self.k + 0.0001, self.b0),
+                Vector::new(self.a1, self.k + 0.0001, self.b1),
             )),
         }
     }

@@ -1,16 +1,17 @@
 use crate::{
+    bvh::Bvh,
     camera::{Camera, CameraConstructor},
     materials::{Diffuse, Light},
     objects::{
-        Block, HittableList, RectPlane, Rectangle, Rotate, RotationAxis,
-        Sphere, Translate,
+        Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
+        RotationAxis, Sphere, Translate,
     },
     vector3::Vector,
 };
 
 #[derive(Debug)]
 pub struct Scene {
-    pub objects: HittableList,
+    pub objects: Box<dyn Hittable>,
     pub camera: Camera,
 }
 
@@ -26,7 +27,7 @@ pub fn config_test_ball() -> Config {
         resolution: (480, 480),
         samples: 400,
         scene: Scene {
-            objects: HittableList::new(vec![
+            objects: Box::new(HittableList::new(vec![
                 Box::new(Sphere::new(
                     Vector::new(0.0, 1.0, 0.0),
                     1.0,
@@ -48,7 +49,7 @@ pub fn config_test_ball() -> Config {
                         emittance: Vector::new(15.0, 15.0, 15.0),
                     },
                 )),
-            ]),
+            ])),
             camera: Camera::default(1.0),
         },
     }
@@ -61,9 +62,9 @@ pub fn config_cornell_box() -> Config {
 
     Config {
         resolution: (400, 400),
-        samples: 500,
+        samples: 300,
         scene: Scene {
-            objects: HittableList::new(vec![
+            objects: Bvh::construct(&mut vec![
                 Box::new(Rectangle::<Diffuse, { RectPlane::YZ }> {
                     a0: 0.0,
                     a1: 555.0,

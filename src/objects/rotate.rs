@@ -62,7 +62,7 @@ impl<H: Hittable, const A: RotationAxis> Hittable for Rotate<H, { A }> {
             })
     }
 
-    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+    fn bounding_box(&self) -> Option<Aabb> {
         self.bounding_box
     }
 }
@@ -79,7 +79,7 @@ impl<H: Hittable, const A: RotationAxis> Rotate<H, { A }> {
             RotationAxis::Z => (2, 0, 1),
         };
 
-        let bounding_box = hittable.bounding_box(0.0, 1.0).map(|mut bbox| {
+        let bounding_box = hittable.bounding_box().map(|mut bbox| {
             let mut min = Vector::new(f32::MAX, f32::MAX, f32::MAX);
             let mut max = Vector::new(-f32::MAX, -f32::MAX, -f32::MAX);
             for i in 0..2 {

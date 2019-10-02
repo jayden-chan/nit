@@ -52,7 +52,7 @@ impl<M: Material> Hittable for Sphere<M> {
         None
     }
 
-    fn bounding_box(&self, _t0: f32, _t1: f32) -> Option<Aabb> {
+    fn bounding_box(&self) -> Option<Aabb> {
         Some(Aabb::new(
             self.center - Vector::new(self.radius, self.radius, self.radius),
             self.center + Vector::new(self.radius, self.radius, self.radius),

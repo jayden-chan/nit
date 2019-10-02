@@ -22,8 +22,8 @@ impl<H: Hittable> Hittable for Translate<H> {
             })
     }
 
-    fn bounding_box(&self, t0: f32, t1: f32) -> Option<Aabb> {
-        self.hittable.bounding_box(t0, t1).map(|mut aabb| {
+    fn bounding_box(&self) -> Option<Aabb> {
+        self.hittable.bounding_box().map(|mut aabb| {
             aabb.min += self.offset;
             aabb.max += self.offset;
             aabb
