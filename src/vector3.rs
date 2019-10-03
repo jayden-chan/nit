@@ -21,7 +21,7 @@ pub struct Vector {
 /// Constructor-like
 impl Vector {
     /// Creates a new vector with the provided x, y, and z values
-    pub fn new(x: f32, y: f32, z: f32) -> Self {
+    pub const fn new(x: f32, y: f32, z: f32) -> Self {
         Self { x, y, z }
     }
 
@@ -222,6 +222,20 @@ impl ops::DivAssign<f32> for Vector {
         self.x /= rhs;
         self.y /= rhs;
         self.z /= rhs;
+    }
+}
+
+/// Divide by another vector. Simply divides the fields
+/// individually
+impl ops::Div<Vector> for Vector {
+    type Output = Vector;
+
+    fn div(self, rhs: Vector) -> Vector {
+        Vector {
+            x: self.x / rhs.x,
+            y: self.y / rhs.y,
+            z: self.z / rhs.z,
+        }
     }
 }
 

@@ -1,19 +1,24 @@
-use crate::image::Pixel;
+use crate::{image::Pixel, Vector};
 
+static LUMINANCE_TRIPLE: Vector = Vector::new(0.2126, 0.7152, 0.0722);
+
+#[derive(Debug, Copy, Clone)]
 pub enum ToneMappingOperator {
     Clamp(f32),
+    ReinhardJodie,
 }
 
 impl ToneMappingOperator {
     pub fn apply(self, buffer: &mut Vec<Vec<Pixel>>) {
         match self {
             ToneMappingOperator::Clamp(max) => clamp(buffer, max),
+            ToneMappingOperator::ReinhardJodie => reinhard_jodie(buffer),
         }
     }
 }
 
 /// Applies the clamp tone-mapping operator on the provided pixel buffer.
-/// The pixel values will be clamped between 0 and
+/// The pixel values will be clamped between 0 and max
 fn clamp(buffer: &mut Vec<Vec<Pixel>>, max: f32) {
     buffer.iter_mut().for_each(|row| {
         row.iter_mut().for_each(|pixel| {
@@ -39,4 +44,29 @@ fn clamp(buffer: &mut Vec<Vec<Pixel>>, max: f32) {
             }
         });
     });
+}
+
+fn reinhard_jodie(buffer: &mut Vec<Vec<Pixel>>) {
+    buffer.iter_mut().for_each(|row| {
+        row.iter_mut().for_each(|pixel| {
+            let v = Vector::new(pixel.r, pixel.g, pixel.g);
+            let l = luminance(v);
+
+            let tv = v / (v + 1.0);
+
+            let p_new = lerp(v / (1.0 + l), tv, tv);
+
+            pixel.r = p_new.x;
+            pixel.g = p_new.y;
+            pixel.b = p_new.z;
+        });
+    });
+}
+
+fn luminance(v: Vector) -> f32 {
+    v.dot(LUMINANCE_TRIPLE)
+}
+
+fn lerp(a: Vector, b: Vector, t: Vector) -> Vector {
+    a + t * (b - a)
 }

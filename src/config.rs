@@ -1,6 +1,7 @@
 use crate::{
     bvh::Bvh,
     camera::{Camera, CameraConstructor},
+    color::ToneMappingOperator,
     materials::{Diffuse, Light},
     objects::{
         Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
@@ -19,6 +20,7 @@ pub struct Scene {
 pub struct Config {
     pub resolution: (usize, usize),
     pub samples: usize,
+    pub tmo: ToneMappingOperator,
     pub scene: Scene,
 }
 
@@ -26,6 +28,7 @@ pub fn config_test_ball() -> Config {
     Config {
         resolution: (480, 480),
         samples: 400,
+        tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Box::new(HittableList::new(vec![
                 Box::new(Sphere::new(
@@ -61,10 +64,11 @@ pub fn config_cornell_box() -> Config {
     let white = Vector::new(0.73, 0.73, 0.73);
 
     Config {
-        resolution: (400, 400),
-        samples: 300,
+        resolution: (250, 250),
+        samples: 400,
+        tmo: ToneMappingOperator::Clamp(1.0),
         scene: Scene {
-            objects: Bvh::construct(&mut vec![
+            objects: Box::new(HittableList::new(vec![
                 Box::new(Rectangle::<Diffuse, { RectPlane::YZ }> {
                     a0: 0.0,
                     a1: 555.0,
@@ -91,7 +95,11 @@ pub fn config_cornell_box() -> Config {
                     k: 554.9,
                     norm: -1.0,
                     material: Light {
-                        emittance: Vector::new(15.0, 15.0, 15.0),
+                        emittance: Vector::new(
+                            25.2 / 2.0,
+                            18.7 / 2.0,
+                            6.0 / 2.0,
+                        ),
                     },
                 }),
                 Box::new(Rectangle::<Diffuse, { RectPlane::XZ }> {
@@ -149,7 +157,7 @@ pub fn config_cornell_box() -> Config {
                             15.0,
                         ),
                 }),
-            ]),
+            ])),
             camera: Camera::new(CameraConstructor {
                 look_from: Vector::new(278.0, 278.0, -772.0),
                 look_at: Vector::new(278.0, 278.0, 0.0),
