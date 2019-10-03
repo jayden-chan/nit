@@ -23,7 +23,7 @@ Tentative plan for the program
 
 ### Tone Mapping
 - [x] Clamp
-- [ ] Reinhard-Jodie
+- [x] Reinhard-Jodie
 - [ ] Filmic
 - [ ] Camera Response Functions
 
