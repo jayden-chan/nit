@@ -49,7 +49,7 @@ fn clamp(buffer: &mut Vec<Vec<Pixel>>, max: f32) {
 fn reinhard_jodie(buffer: &mut Vec<Vec<Pixel>>) {
     buffer.iter_mut().for_each(|row| {
         row.iter_mut().for_each(|pixel| {
-            let v = Vector::new(pixel.r, pixel.g, pixel.g);
+            let v = Vector::new(pixel.r, pixel.g, pixel.b);
             let l = luminance(v);
 
             let tv = v / (v + 1.0);

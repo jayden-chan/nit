@@ -66,7 +66,7 @@ pub fn config_cornell_box() -> Config {
     Config {
         resolution: (250, 250),
         samples: 400,
-        tmo: ToneMappingOperator::Clamp(1.0),
+        tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Box::new(HittableList::new(vec![
                 Box::new(Rectangle::<Diffuse, { RectPlane::YZ }> {
