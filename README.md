@@ -29,16 +29,18 @@ Tentative plan for the program
 - [ ] Filmic
 - [ ] Camera Response Functions
 
-### General Features
+### Performance
 - [x] Parallel Rendering (CPU)
 - [ ] Parallel Rendering (GPU)
 - [ ] Multi-machine distributed rendering
-- [ ] .obj File loading
-- [ ] Photon mapping
 - [ ] MLT
 - [ ] Importance Sampling
-- [ ] Spectral rays
 - [x] BVH
 - [ ] k-d tree
+
+### General Features
+- [ ] .obj File loading
+- [ ] Photon mapping
+- [ ] Spectral rays
 - [ ] Adaptive sampling
 - [ ] Russian Roulette loop termination
