@@ -1,6 +1,6 @@
 use std::{error::Error, fs::File, io::prelude::*, path::Path};
 
-use crate::color::ToneMappingOperator;
+use crate::{color::ToneMappingOperator, Vector};
 
 pub struct Pixel {
     /// Red value
@@ -13,6 +13,14 @@ pub struct Pixel {
     pub x: usize,
     /// Y coordinate
     pub y: usize,
+}
+
+impl Pixel {
+    const LUMINANCE_TRIPLE: Vector = Vector::new(0.2126, 0.7152, 0.0722);
+
+    pub fn luminance(&self) -> f32 {
+        Vector::new(self.r, self.b, self.g).dot(Self::LUMINANCE_TRIPLE)
+    }
 }
 
 pub struct ImageBuffer {

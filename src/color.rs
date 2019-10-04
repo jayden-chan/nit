@@ -1,7 +1,5 @@
 use crate::{image::Pixel, Vector};
 
-static LUMINANCE_TRIPLE: Vector = Vector::new(0.2126, 0.7152, 0.0722);
-
 #[derive(Debug, Copy, Clone)]
 pub enum ToneMappingOperator {
     Clamp(f32),
@@ -50,7 +48,7 @@ fn reinhard_jodie(buffer: &mut Vec<Vec<Pixel>>) {
     buffer.iter_mut().for_each(|row| {
         row.iter_mut().for_each(|pixel| {
             let v = Vector::new(pixel.r, pixel.g, pixel.b);
-            let l = luminance(v);
+            let l = pixel.luminance();
 
             let tv = v / (v + 1.0);
 
@@ -61,10 +59,6 @@ fn reinhard_jodie(buffer: &mut Vec<Vec<Pixel>>) {
             pixel.b = p_new.z;
         });
     });
-}
-
-fn luminance(v: Vector) -> f32 {
-    v.dot(LUMINANCE_TRIPLE)
 }
 
 fn lerp(a: Vector, b: Vector, t: Vector) -> Vector {
