@@ -5,7 +5,7 @@ use crate::{
     materials::{Dielectric, Diffuse, Light},
     objects::{
         Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
-        RotationAxis, Sphere, Translate,
+        RotationAxis, Sphere, Translate, Triangle,
     },
     vector3::Vector,
 };
@@ -194,6 +194,57 @@ pub fn config_glass() -> Config {
                     100.0,
                     Dielectric { ref_idx: 1.52 },
                 )),
+                Box::new(Rectangle::<Light, { RectPlane::XZ }> {
+                    a0: 213.0,
+                    a1: 343.0,
+                    b0: 227.0,
+                    b1: 332.0,
+                    k: 554.9,
+                    norm: -1.0,
+                    material: Light {
+                        emittance: Vector::new(18.0, 18.0, 18.0),
+                    },
+                }),
+            ])),
+            camera: Camera::new(CameraConstructor {
+                look_from: Vector::new(278.0, 278.0, -772.0),
+                look_at: Vector::new(278.0, 278.0, 0.0),
+                vup: Vector::new(0.0, 1.0, 0.0),
+                vfov: 40.0,
+                aspect_r: 1.0,
+                aperture: 0.0,
+                focus_dist: 1.0,
+            }),
+        },
+    }
+}
+
+pub fn config_triangle_test() -> Config {
+    Config {
+        resolution: (250, 250),
+        samples: 400,
+        tmo: ToneMappingOperator::ReinhardJodie,
+        scene: Scene {
+            objects: Box::new(HittableList::new(vec![
+                Box::new(Rectangle::<Diffuse, { RectPlane::XZ }> {
+                    a0: -50000.0,
+                    a1: 50000.0,
+                    b0: -50000.0,
+                    b1: 50000.0,
+                    k: 0.0,
+                    norm: 1.0,
+                    material: Diffuse {
+                        albedo: Vector::new(0.5, 0.5, 0.5),
+                    },
+                }),
+                Box::new(Triangle {
+                    v0: Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
+                    v1: Vector::new(555.0, 300.0, 555.0),
+                    v2: Vector::new(0.0, 300.0, 555.0),
+                    material: Diffuse {
+                        albedo: Vector::new(1.0, 0.2, 0.2),
+                    },
+                }),
                 Box::new(Rectangle::<Light, { RectPlane::XZ }> {
                     a0: 213.0,
                     a1: 343.0,

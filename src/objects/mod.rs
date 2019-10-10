@@ -20,6 +20,9 @@ pub use sphere::*;
 mod translate;
 pub use translate::*;
 
+mod triangle;
+pub use triangle::*;
+
 /// Describes an interaction between an incoming [`Ray`]
 /// and an object.
 ///
