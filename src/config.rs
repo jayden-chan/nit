@@ -302,51 +302,51 @@ pub fn config_triangle_test() -> Config {
                         albedo: Vector::new(0.5, 0.5, 0.5),
                     },
                 )),
-                Box::new(Triangle {
-                    v0: Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
-                    v1: Vector::new(555.0, 300.0, 555.0),
-                    v2: Vector::new(0.0, 300.0, 555.0),
-                    norm: -1.0,
-                    material: Diffuse {
+                Box::new(Triangle::new(
+                    Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
+                    Vector::new(555.0, 300.0, 555.0),
+                    Vector::new(0.0, 300.0, 555.0),
+                    -1.0,
+                    Diffuse {
                         albedo: Vector::new(1.0, 0.2, 0.2),
                     },
-                }),
-                Box::new(Triangle {
-                    v0: Vector::new(555.0, 0.0, 100.0),
-                    v1: Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
-                    v2: Vector::new(555.0, 300.0, 555.0),
-                    norm: 1.0,
-                    material: Diffuse {
+                )),
+                Box::new(Triangle::new(
+                    Vector::new(555.0, 0.0, 100.0),
+                    Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
+                    Vector::new(555.0, 300.0, 555.0),
+                    1.0,
+                    Diffuse {
                         albedo: Vector::new(1.0, 0.2, 0.2),
                     },
-                }),
-                Box::new(Triangle {
-                    v0: Vector::new(0.0, 0.0, 100.0),
-                    v1: Vector::new(0.0, 300.0, 555.0),
-                    v2: Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
-                    norm: 1.0,
-                    material: Diffuse {
+                )),
+                Box::new(Triangle::new(
+                    Vector::new(0.0, 0.0, 100.0),
+                    Vector::new(0.0, 300.0, 555.0),
+                    Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
+                    1.0,
+                    Diffuse {
                         albedo: Vector::new(1.0, 0.2, 0.2),
                     },
-                }),
-                Box::new(Triangle {
-                    v0: Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
-                    v1: Vector::new(555.0, 0.0, 100.0),
-                    v2: Vector::new(555.0 / 2.0, 0.0, 555.0 / 2.0),
-                    norm: 1.0,
-                    material: Diffuse {
+                )),
+                Box::new(Triangle::new(
+                    Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
+                    Vector::new(555.0, 0.0, 100.0),
+                    Vector::new(555.0 / 2.0, 0.0, 555.0 / 2.0),
+                    1.0,
+                    Diffuse {
                         albedo: Vector::new(1.0, 0.2, 0.2),
                     },
-                }),
-                Box::new(Triangle {
-                    v0: Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
-                    v1: Vector::new(0.0, 0.0, 100.0),
-                    v2: Vector::new(555.0 / 2.0, 0.0, 555.0 / 2.0),
-                    norm: -1.0,
-                    material: Diffuse {
+                )),
+                Box::new(Triangle::new(
+                    Vector::new(555.0 / 2.0, 100.0, 555.0 / 2.0),
+                    Vector::new(0.0, 0.0, 100.0),
+                    Vector::new(555.0 / 2.0, 0.0, 555.0 / 2.0),
+                    -1.0,
+                    Diffuse {
                         albedo: Vector::new(1.0, 0.2, 0.2),
                     },
-                }),
+                )),
                 Box::new(Sphere::new(
                     Vector::new(555.0 / 2.0, 750.0, 600.0),
                     100.0,
@@ -371,15 +371,15 @@ pub fn config_triangle_test() -> Config {
 pub fn config_triangle_test_two() -> Config {
     let mut objects = config_cornell_box();
 
-    objects.append(&mut vec![Box::new(Triangle {
-        v0: Vector::new(555.0 / 2.0, 100.0, 200.0),
-        v1: Vector::new(555.0 - 100.0, 300.0, 400.0),
-        v2: Vector::new(100.0, 300.0, 400.0),
-        norm: 1.0,
-        material: Diffuse {
+    objects.append(&mut vec![Box::new(Triangle::new(
+        Vector::new(555.0 / 2.0, 100.0, 200.0),
+        Vector::new(555.0 - 100.0, 300.0, 400.0),
+        Vector::new(100.0, 300.0, 400.0),
+        1.0,
+        Diffuse {
             albedo: Vector::new(1.0, 0.2, 0.2),
         },
-    })]);
+    ))]);
 
     Config {
         resolution: (300, 300),
