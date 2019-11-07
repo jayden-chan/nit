@@ -25,60 +25,24 @@ where
 {
     pub fn new(p0: Vector, p1: Vector, material: M) -> Self {
         let objects: Vec<Box<dyn Hittable>> = vec![
-            Box::new(Rectangle::<M, { RectPlane::XY }> {
-                a0: p0.x,
-                a1: p1.x,
-                b0: p0.y,
-                b1: p1.y,
-                k: p1.z,
-                norm: 1.0,
-                material,
-            }),
-            Box::new(Rectangle::<M, { RectPlane::XY }> {
-                a0: p0.x,
-                a1: p1.x,
-                b0: p0.y,
-                b1: p1.y,
-                k: p0.z,
-                norm: -1.0,
-                material,
-            }),
-            Box::new(Rectangle::<M, { RectPlane::XZ }> {
-                a0: p0.x,
-                a1: p1.x,
-                b0: p0.z,
-                b1: p1.z,
-                k: p1.y,
-                norm: 1.0,
-                material,
-            }),
-            Box::new(Rectangle::<M, { RectPlane::XZ }> {
-                a0: p0.x,
-                a1: p1.x,
-                b0: p0.z,
-                b1: p1.z,
-                k: p0.y,
-                norm: -1.0,
-                material,
-            }),
-            Box::new(Rectangle::<M, { RectPlane::YZ }> {
-                a0: p0.y,
-                a1: p1.y,
-                b0: p0.z,
-                b1: p1.z,
-                k: p1.x,
-                norm: 1.0,
-                material,
-            }),
-            Box::new(Rectangle::<M, { RectPlane::YZ }> {
-                a0: p0.y,
-                a1: p1.y,
-                b0: p0.z,
-                b1: p1.z,
-                k: p0.x,
-                norm: -1.0,
-                material,
-            }),
+            Box::new(Rectangle::<M, { RectPlane::XY }>::new(
+                p0.x, p1.x, p0.y, p1.y, p1.z, 1.0, material,
+            )),
+            Box::new(Rectangle::<M, { RectPlane::XY }>::new(
+                p0.x, p1.x, p0.y, p1.y, p0.z, -1.0, material,
+            )),
+            Box::new(Rectangle::<M, { RectPlane::XZ }>::new(
+                p0.x, p1.x, p0.z, p1.z, p1.y, 1.0, material,
+            )),
+            Box::new(Rectangle::<M, { RectPlane::XZ }>::new(
+                p0.x, p1.x, p0.z, p1.z, p0.y, -1.0, material,
+            )),
+            Box::new(Rectangle::<M, { RectPlane::YZ }>::new(
+                p0.y, p1.y, p0.z, p1.z, p1.x, 1.0, material,
+            )),
+            Box::new(Rectangle::<M, { RectPlane::YZ }>::new(
+                p0.y, p1.y, p0.z, p1.z, p0.x, -1.0, material,
+            )),
         ];
 
         Self {

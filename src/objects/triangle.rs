@@ -15,6 +15,7 @@ pub struct Triangle<M: Material> {
     pub v0: Vector,
     pub v1: Vector,
     pub v2: Vector,
+    pub norm: f32,
     pub material: M,
 }
 
@@ -27,7 +28,6 @@ impl<M: Material> Hittable for Triangle<M> {
         let a = edge1.dot(h);
 
         if a > -EPSILON && a < EPSILON {
-            // This ray is parallel to this triangle.
             return None;
         }
 
@@ -46,20 +46,17 @@ impl<M: Material> Hittable for Triangle<M> {
             return None;
         }
 
-        // At this stage we can compute t to find out where the intersection point is on the line.
         let t = f * edge2.dot(q);
         if t > EPSILON && t < 1.0 / EPSILON && t > t_min && t < t_max {
-            // ray intersection
             return Some(Hit {
                 u,
                 v,
                 t,
                 p: r.origin + r.dir * t,
-                normal: -edge1.cross(edge2).normalize(),
+                normal: edge1.cross(edge2).normalize() * self.norm,
                 material: &self.material,
             });
         } else {
-            // This means that there is a line intersection but not a ray intersection.
             return None;
         }
     }

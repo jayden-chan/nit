@@ -9,22 +9,65 @@ pub enum RectPlane {
 
 #[derive(Debug)]
 pub struct Rectangle<M: Material, const P: RectPlane> {
-    pub a0: f32,
-    pub a1: f32,
-    pub b0: f32,
-    pub b1: f32,
-    pub k: f32,
-    pub norm: f32,
-    pub material: M,
+    a0: f32,
+    a1: f32,
+    b0: f32,
+    b1: f32,
+    k: f32,
+    norm: Vector,
+    material: M,
+    plane: (usize, usize, usize),
+    bbox: Aabb,
+}
+
+impl<M: Material, const P: RectPlane> Rectangle<M, { P }> {
+    pub fn new(
+        a0: f32,
+        a1: f32,
+        b0: f32,
+        b1: f32,
+        k: f32,
+        norm: f32,
+        material: M,
+    ) -> Self {
+        Rectangle {
+            a0,
+            a1,
+            b0,
+            b1,
+            k,
+            norm: match P {
+                RectPlane::XY => Vector::new(0.0, 0.0, 1.0) * norm,
+                RectPlane::YZ => Vector::new(1.0, 0.0, 0.0) * norm,
+                RectPlane::XZ => Vector::new(0.0, 1.0, 0.0) * norm,
+            },
+            material,
+            plane: match P {
+                RectPlane::XY => (2, 0, 1),
+                RectPlane::YZ => (0, 1, 2),
+                RectPlane::XZ => (1, 0, 2),
+            },
+            bbox: match P {
+                RectPlane::XY => Aabb::new(
+                    Vector::new(a0, b0, k - 0.0001),
+                    Vector::new(a1, b1, k + 0.0001),
+                ),
+                RectPlane::YZ => Aabb::new(
+                    Vector::new(k - 0.0001, a0, b0),
+                    Vector::new(k + 0.0001, a1, b1),
+                ),
+                RectPlane::XZ => Aabb::new(
+                    Vector::new(a0, k - 0.0001, b0),
+                    Vector::new(a1, k + 0.0001, b1),
+                ),
+            },
+        }
+    }
 }
 
 impl<M: Material, const P: RectPlane> Hittable for Rectangle<M, { P }> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
-        let (k_ax, a_ax, b_ax) = match P {
-            RectPlane::XY => (2, 0, 1),
-            RectPlane::YZ => (0, 1, 2),
-            RectPlane::XZ => (1, 0, 2),
-        };
+        let (k_ax, a_ax, b_ax) = self.plane;
 
         let t = (self.k - r.origin[k_ax]) / r.dir[k_ax];
         if t < t_min || t > t_max {
@@ -38,36 +81,17 @@ impl<M: Material, const P: RectPlane> Hittable for Rectangle<M, { P }> {
             return None;
         }
 
-        let normal = match P {
-            RectPlane::XY => Vector::new(0.0, 0.0, 1.0),
-            RectPlane::YZ => Vector::new(1.0, 0.0, 0.0),
-            RectPlane::XZ => Vector::new(0.0, 1.0, 0.0),
-        };
-
         Some(Hit {
             u: (x - self.a0) / (self.a1 - self.a0),
             v: (y - self.b0) / (self.b1 - self.b0),
             t,
             p: r.point_at_parameter(t),
-            normal: normal * self.norm,
+            normal: self.norm,
             material: &self.material,
         })
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        match P {
-            RectPlane::XY => Some(Aabb::new(
-                Vector::new(self.a0, self.b0, self.k - 0.0001),
-                Vector::new(self.a1, self.b1, self.k + 0.0001),
-            )),
-            RectPlane::YZ => Some(Aabb::new(
-                Vector::new(self.k - 0.0001, self.a0, self.b0),
-                Vector::new(self.k + 0.0001, self.a1, self.b1),
-            )),
-            RectPlane::XZ => Some(Aabb::new(
-                Vector::new(self.a0, self.k - 0.0001, self.b0),
-                Vector::new(self.a1, self.k + 0.0001, self.b1),
-            )),
-        }
+        Some(self.bbox)
     }
 }

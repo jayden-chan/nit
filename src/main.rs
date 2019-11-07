@@ -20,7 +20,7 @@ use std::time;
 
 fn main() -> Result<(), String> {
     let start_time = time::Instant::now();
-    let config = config_triangle_test();
+    let config = config_cornell_box_cubes();
     let tmo = config.tmo;
 
     let mut buffer = ImageBuffer::new(config.resolution);
