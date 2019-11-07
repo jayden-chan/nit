@@ -15,6 +15,7 @@ pub struct Sphere<M: Material> {
     center: Vector,
     radius: f32,
     material: M,
+    bbox: Aabb,
 }
 
 impl<M: Material> Hittable for Sphere<M> {
@@ -53,10 +54,7 @@ impl<M: Material> Hittable for Sphere<M> {
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        Some(Aabb::new(
-            self.center - Vector::new(self.radius, self.radius, self.radius),
-            self.center + Vector::new(self.radius, self.radius, self.radius),
-        ))
+        Some(self.bbox)
     }
 }
 
@@ -66,6 +64,10 @@ impl<M: Material> Sphere<M> {
             center,
             radius,
             material,
+            bbox: Aabb::new(
+                center - Vector::new(radius, radius, radius),
+                center + Vector::new(radius, radius, radius),
+            ),
         }
     }
 }
