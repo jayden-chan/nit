@@ -1,5 +1,4 @@
 use crate::{
-    bvh::Bvh,
     camera::{Camera, CameraConstructor},
     color::ToneMappingOperator,
     materials::{Dielectric, Diffuse, Light},
@@ -59,11 +58,8 @@ pub fn config_test_ball() -> Config {
 }
 
 pub fn config_cornell_box_cubes() -> Config {
-    let green = Vector::new(0.12, 0.45, 0.15);
-    let red = Vector::new(0.65, 0.05, 0.05);
-    let white = Vector::new(0.73, 0.73, 0.73);
-
     let mut objects = cornell_box();
+
     objects.push(Box::new(Translate {
         offset: Vector::new(130.0, 0.0, 65.0),
         hittable: Rotate::<Block<Diffuse>, { RotationAxis::Y }>::new(
@@ -276,7 +272,7 @@ pub fn config_triangle_test_two() -> Config {
 }
 
 pub fn config_cornell_box() -> Config {
-    let mut objects = cornell_box();
+    let objects = cornell_box();
 
     Config {
         resolution: (250, 250),
@@ -297,7 +293,7 @@ pub fn config_cornell_box() -> Config {
     }
 }
 
-fn cornell_box() -> Vec<Box<Hittable>> {
+fn cornell_box() -> Vec<Box<dyn Hittable>> {
     let green = Vector::new(0.12, 0.45, 0.15);
     let red = Vector::new(0.65, 0.05, 0.05);
     let white = Vector::new(0.73, 0.73, 0.73);

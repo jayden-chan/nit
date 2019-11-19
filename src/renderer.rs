@@ -4,7 +4,6 @@ use rayon::prelude::*;
 use crate::{
     config::{Config, Scene},
     image::ImageBuffer,
-    objects::Hittable,
     ray::Ray,
     Vector,
 };
