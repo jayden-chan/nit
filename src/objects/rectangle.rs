@@ -1,6 +1,7 @@
 use super::{Hit, Hittable};
 use crate::{aabb::Aabb, materials::Material, ray::Ray, Vector};
 
+#[derive(PartialEq, Eq)]
 pub enum RectPlane {
     XY,
     YZ,

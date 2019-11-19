@@ -2,6 +2,7 @@ use super::{Hit, Hittable};
 use crate::{aabb::Aabb, ray::Ray, Vector};
 use std::f32;
 
+#[derive(PartialEq, Eq)]
 pub enum RotationAxis {
     X,
     Y,

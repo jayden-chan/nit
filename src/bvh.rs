@@ -42,6 +42,7 @@ impl Hittable for Bvh {
     }
 }
 
+#[derive(PartialEq, Eq)]
 enum SortAxis {
     X = 0,
     Y = 1,
