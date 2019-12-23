@@ -1,6 +1,8 @@
 use crate::{image::Pixel, Vector};
 
-#[derive(Debug, Copy, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Copy, Clone, Deserialize, Serialize)]
 pub enum ToneMappingOperator {
     Clamp(f32),
     ReinhardJodie,
