@@ -8,11 +8,12 @@ use crate::{
 
 use rand::prelude::*;
 
+use serde::{Deserialize, Serialize};
 use std::f32;
 
 /// The Dielectric material type. This material partially
 /// reflects and refracts rays that interact with it.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Deserialize, Serialize)]
 pub struct Dielectric {
     pub ref_idx: f32,
 }
@@ -28,6 +29,7 @@ fn schlick(cosine: f32, ref_idx: f32) -> f32 {
     r0 + (1.0 - r0) * f32::powi(1.0 - cosine, 5)
 }
 
+#[typetag::serde]
 impl Material for Dielectric {
     fn scatter(&self, r_in: Ray, hit_record: Hit) -> Option<Scatter> {
         let reflected = vector_reflect(r_in.dir, hit_record.normal);
@@ -45,8 +47,7 @@ impl Material for Dielectric {
                 (
                     hit_record.normal,
                     1.0 / self.ref_idx,
-                    -r_in.dir.dot(hit_record.normal)
-                        * r_in.dir.inv_mag(),
+                    -r_in.dir.dot(hit_record.normal) * r_in.dir.inv_mag(),
                 )
             };
 

@@ -10,8 +10,10 @@ use rand::prelude::*;
 use std::f32;
 use std::ops;
 
+use serde::{Deserialize, Serialize};
+
 /// A 3 dimentional vector.
-#[derive(Debug, Copy, Clone)]
+#[derive(Debug, Copy, Clone, Deserialize, Serialize)]
 pub struct Vector {
     pub x: f32,
     pub y: f32,

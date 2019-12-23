@@ -5,11 +5,14 @@ use crate::{
     Vector,
 };
 
-#[derive(Debug, Copy, Clone)]
+use serde::{Deserialize, Serialize};
+
+#[derive(Debug, Copy, Clone, Deserialize, Serialize)]
 pub struct Light {
     pub emittance: Vector,
 }
 
+#[typetag::serde]
 impl Material for Light {
     fn scatter(&self, _r: Ray, _hit: Hit) -> Option<Scatter> {
         None
