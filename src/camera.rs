@@ -3,9 +3,7 @@ use crate::{ray::Ray, Vector};
 
 use std::f32;
 
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Clone, Deserialize, Serialize)]
+#[derive(Debug, Clone)]
 pub struct Camera {
     lower_left_corner: Vector,
     horizontal: Vector,

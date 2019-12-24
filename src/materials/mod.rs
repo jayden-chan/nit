@@ -19,7 +19,6 @@ pub struct Scatter {
     pub attenuation: Vector,
 }
 
-#[typetag::serde(tag = "type")]
 pub trait Material: Debug + Send + Sync {
     fn scatter(&self, _r: Ray, _hit: Hit) -> Option<Scatter>;
 

@@ -6,14 +6,11 @@ use crate::{
     Vector,
 };
 
-use serde::{Deserialize, Serialize};
-
-#[derive(Debug, Copy, Clone, Deserialize, Serialize)]
+#[derive(Debug, Copy, Clone)]
 pub struct Reflector {
     pub albedo: Vector,
 }
 
-#[typetag::serde]
 impl Material for Reflector {
     fn scatter(&self, r: Ray, hit: Hit) -> Option<Scatter> {
         let reflected = vector_reflect(r.dir.normalize(), hit.normal);

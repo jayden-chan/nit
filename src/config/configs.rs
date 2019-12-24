@@ -1,6 +1,7 @@
 use crate::{
     camera::{Camera, CameraConstructor},
     color::ToneMappingOperator,
+    config::{Config, Scene},
     materials::{Dielectric, Diffuse, Light},
     objects::{
         Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
@@ -9,20 +10,7 @@ use crate::{
     vector3::Vector,
 };
 
-#[derive(Debug)]
-pub struct Scene {
-    pub objects: Box<dyn Hittable>,
-    pub camera: Camera,
-}
-
-#[derive(Debug)]
-pub struct Config {
-    pub resolution: (usize, usize),
-    pub samples: usize,
-    pub tmo: ToneMappingOperator,
-    pub scene: Scene,
-}
-
+#[allow(dead_code)]
 pub fn config_test_ball() -> Config {
     Config {
         resolution: (480, 480),
@@ -57,6 +45,7 @@ pub fn config_test_ball() -> Config {
     }
 }
 
+#[allow(dead_code)]
 pub fn config_cornell_box_cubes() -> Config {
     let mut objects = cornell_box();
 
@@ -107,6 +96,7 @@ pub fn config_cornell_box_cubes() -> Config {
     }
 }
 
+#[allow(dead_code)]
 pub fn config_glass() -> Config {
     Config {
         resolution: (250, 250),
@@ -155,6 +145,7 @@ pub fn config_glass() -> Config {
     }
 }
 
+#[allow(dead_code)]
 pub fn config_triangle_test() -> Config {
     Config {
         resolution: (400, 400),
@@ -239,6 +230,7 @@ pub fn config_triangle_test() -> Config {
     }
 }
 
+#[allow(dead_code)]
 pub fn config_triangle_test_two() -> Config {
     let mut objects = cornell_box();
 
@@ -271,6 +263,7 @@ pub fn config_triangle_test_two() -> Config {
     }
 }
 
+#[allow(dead_code)]
 pub fn config_cornell_box() -> Config {
     let objects = cornell_box();
 
@@ -293,6 +286,7 @@ pub fn config_cornell_box() -> Config {
     }
 }
 
+#[allow(dead_code)]
 fn cornell_box() -> Vec<Box<dyn Hittable>> {
     let green = Vector::new(0.12, 0.45, 0.15);
     let red = Vector::new(0.65, 0.05, 0.05);
