@@ -1,14 +1,57 @@
 use crate::{
+    bvh::Bvh,
     camera::{Camera, CameraConstructor},
     color::ToneMappingOperator,
     config::{Config, Scene},
     materials::{Dielectric, Diffuse, Light},
+    obj_loader::ObjLoader,
     objects::{
         Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
         RotationAxis, Sphere, Translate, Triangle,
     },
     vector3::Vector,
 };
+
+use std::{fs, io};
+
+#[allow(dead_code)]
+pub fn config_obj_bunny() -> Config {
+    let mut file = fs::File::open("test/bunny.obj")
+        .map(io::BufReader::new)
+        .unwrap();
+    let loader = ObjLoader::new();
+    let mat = Diffuse {
+        albedo: Vector::new(0.9, 0.1, 0.1),
+    };
+    let mut objects = loader.parse(&mut file, mat).unwrap();
+    objects.push(Box::new(Sphere::new(
+        Vector::new(10.0, 14.0, 7.0),
+        4.0,
+        Light {
+            emittance: Vector::new(15.0, 15.0, 15.0),
+        },
+    )));
+
+    let camera_settings = CameraConstructor {
+        look_at: Vector::new(0.0, 0.1, 0.0),
+        look_from: Vector::new(0.0, 0.3, 0.7),
+        vup: Vector::new(0.0, 1.0, 0.0),
+        vfov: 30.0,
+        aspect_r: 1.0,
+        aperture: 0.0,
+        focus_dist: 1.0,
+    };
+
+    Config {
+        resolution: (600, 600),
+        samples: 600,
+        tmo: ToneMappingOperator::ReinhardJodie,
+        scene: Scene {
+            objects: Bvh::construct(&mut objects),
+            camera: Camera::new(camera_settings),
+        },
+    }
+}
 
 #[allow(dead_code)]
 pub fn config_test_ball() -> Config {

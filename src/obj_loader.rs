@@ -5,7 +5,7 @@
  */
 use crate::{
     materials::Material,
-    objects::{Hittable, HittableList, Triangle},
+    objects::{Hittable, Triangle},
     Vector,
 };
 
@@ -41,11 +41,11 @@ impl ObjLoader {
         }
     }
 
-    pub fn parse<M: 'static + Material>(
-        &mut self,
+    pub fn parse<M: 'static + Material + Copy>(
+        mut self,
         source: &mut dyn io::Read,
         material: M,
-    ) -> Result<Box<dyn Hittable>, Box<dyn Error>> {
+    ) -> Result<Vec<Box<dyn Hittable>>, Box<dyn Error>> {
         let mut s = String::new();
         source.read_to_string(&mut s)?;
         for line in s.lines() {
@@ -58,7 +58,7 @@ impl ObjLoader {
             }
         }
 
-        Ok(Box::new(HittableList::new(self.faces)))
+        Ok(self.faces)
     }
 
     fn parse_vertex(&mut self, s: &str) -> Result<(), Box<dyn Error>> {

@@ -20,6 +20,7 @@ pub struct Triangle<M: Material> {
     material: M,
     edge1: Vector,
     edge2: Vector,
+    bbox: Aabb,
 }
 
 impl<M: Material> Triangle<M> {
@@ -34,6 +35,18 @@ impl<M: Material> Triangle<M> {
         let edge2 = v2 - v0;
         let normal = edge1.cross(edge2).normalize() * norm;
 
+        let min_x = f32::min(f32::min(v0.x, v1.x), f32::min(v1.x, v2.x));
+        let min_y = f32::min(f32::min(v0.y, v1.y), f32::min(v1.y, v2.y));
+        let min_z = f32::min(f32::min(v0.z, v1.z), f32::min(v1.z, v2.z));
+        let max_x = f32::max(f32::max(v0.x, v1.x), f32::max(v1.x, v2.x));
+        let max_y = f32::max(f32::max(v0.y, v1.y), f32::max(v1.y, v2.y));
+        let max_z = f32::max(f32::max(v0.z, v1.z), f32::max(v1.z, v2.z));
+
+        let bbox = Aabb::new(
+            Vector::new(min_x, min_y, min_z),
+            Vector::new(max_x, max_y, max_z),
+        );
+
         Self {
             v0,
             v1,
@@ -42,6 +55,7 @@ impl<M: Material> Triangle<M> {
             material,
             edge1,
             edge2,
+            bbox,
             vertex_normals: [normal; 3],
         }
     }
@@ -57,6 +71,17 @@ impl<M: Material> Triangle<M> {
         let edge1 = v1 - v0;
         let edge2 = v2 - v0;
         let normal = edge1.cross(edge2).normalize() * norm;
+        let min_x = f32::min(f32::min(v0.x, v1.x), f32::min(v1.x, v2.x));
+        let min_y = f32::min(f32::min(v0.y, v1.y), f32::min(v1.y, v2.y));
+        let min_z = f32::min(f32::min(v0.z, v1.z), f32::min(v1.z, v2.z));
+        let max_x = f32::max(f32::max(v0.x, v1.x), f32::max(v1.x, v2.x));
+        let max_y = f32::max(f32::max(v0.y, v1.y), f32::max(v1.y, v2.y));
+        let max_z = f32::max(f32::max(v0.z, v1.z), f32::max(v1.z, v2.z));
+
+        let bbox = Aabb::new(
+            Vector::new(min_x, min_y, min_z),
+            Vector::new(max_x, max_y, max_z),
+        );
 
         Self {
             v0,
@@ -66,6 +91,7 @@ impl<M: Material> Triangle<M> {
             material,
             edge1,
             edge2,
+            bbox,
             vertex_normals,
         }
     }
@@ -128,6 +154,6 @@ impl<M: Material> Hittable for Triangle<M> {
     }
 
     fn bounding_box(&self) -> Option<Aabb> {
-        None
+        Some(self.bbox)
     }
 }

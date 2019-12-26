@@ -9,6 +9,7 @@ mod config;
 mod image;
 mod materials;
 mod math;
+mod obj_loader;
 mod objects;
 mod ray;
 mod renderer;
@@ -21,7 +22,7 @@ use std::time;
 
 fn main() -> Result<(), String> {
     let start_time = time::Instant::now();
-    let config = config_cornell_box();
+    let config = config_obj_bunny();
     let tmo = config.tmo;
 
     let mut buffer = ImageBuffer::new(config.resolution);
