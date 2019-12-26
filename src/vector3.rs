@@ -43,7 +43,7 @@ impl Vector {
         }
     }
 
-    /// Creates a buffer with all random values (between 0 and 1)
+    /// Creates a vector with all random values (between 0 and 1)
     pub fn rand() -> Self {
         Self {
             x: random::<f32>(),
@@ -194,7 +194,7 @@ impl ops::MulAssign<f32> for Vector {
     }
 }
 
-/// Multiply-asign each element of a vector by a float
+/// Multiply-asign each element of a vector by elements of another vector
 impl ops::MulAssign<Vector> for Vector {
     fn mul_assign(&mut self, rhs: Vector) {
         self.x *= rhs.x;

@@ -1,4 +1,4 @@
-//! A triangle primitive implementec with the Möller–Trumbore algorithm
+//! A triangle primitive implemented with the Möller–Trumbore algorithm
 
 use crate::{
     aabb::Aabb,
@@ -15,6 +15,7 @@ pub struct Triangle<M: Material> {
     v0: Vector,
     v1: Vector,
     v2: Vector,
+    vertex_normals: [Vector; 3],
     normal: Vector,
     material: M,
     edge1: Vector,
@@ -31,16 +32,59 @@ impl<M: Material> Triangle<M> {
     ) -> Self {
         let edge1 = v1 - v0;
         let edge2 = v2 - v0;
+        let normal = edge1.cross(edge2).normalize() * norm;
 
         Self {
             v0,
             v1,
             v2,
-            normal: edge1.cross(edge2).normalize() * norm,
+            normal,
             material,
             edge1,
             edge2,
+            vertex_normals: [normal; 3],
         }
+    }
+
+    pub fn with_normals(
+        v0: Vector,
+        v1: Vector,
+        v2: Vector,
+        norm: f32,
+        vertex_normals: [Vector; 3],
+        material: M,
+    ) -> Self {
+        let edge1 = v1 - v0;
+        let edge2 = v2 - v0;
+        let normal = edge1.cross(edge2).normalize() * norm;
+
+        Self {
+            v0,
+            v1,
+            v2,
+            normal,
+            material,
+            edge1,
+            edge2,
+            vertex_normals,
+        }
+    }
+
+    fn local_coordinates(&self, point: Vector) -> (f32, f32, f32) {
+        let ort_ac = self.edge2.cross(self.normal);
+        let ort_ab = self.edge1.cross(self.normal);
+        let point = point - self.v0;
+        let alpha = point.dot(ort_ac) / self.edge1.dot(ort_ac);
+        let beta = point.dot(ort_ab) / self.edge2.dot(ort_ab);
+        let gamma = 1.0 - (alpha + beta);
+        (alpha, beta, gamma)
+    }
+
+    fn interpolate_normal(&self, alpha: f32, beta: f32, gamma: f32) -> Vector {
+        return (alpha * self.vertex_normals[1]
+            + beta * self.vertex_normals[2]
+            + gamma * self.vertex_normals[0])
+            .normalize();
     }
 }
 
