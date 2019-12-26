@@ -9,7 +9,7 @@ mod config;
 mod image;
 mod materials;
 mod math;
-mod objects;
+mod primatives;
 mod ray;
 mod renderer;
 mod stl_loader;

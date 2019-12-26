@@ -1,6 +1,6 @@
 use crate::{
     materials::Material,
-    objects::{Hittable, Triangle},
+    primatives::{Hittable, Triangle},
     Vector,
 };
 use std::io;

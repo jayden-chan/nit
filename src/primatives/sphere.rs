@@ -3,7 +3,7 @@
 use crate::{
     aabb::Aabb,
     materials::Material,
-    objects::{Hit, Hittable},
+    primatives::{Hit, Hittable},
     ray::Ray,
     Vector,
 };

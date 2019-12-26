@@ -1,6 +1,6 @@
 use crate::{
     materials::{Material, Scatter},
-    objects::Hit,
+    primatives::Hit,
     ray::Ray,
     Vector,
 };

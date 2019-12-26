@@ -4,8 +4,7 @@ use crate::{
     color::ToneMappingOperator,
     config::{Config, Scene},
     materials::{Dielectric, Diffuse, Light},
-    // obj_loader::ObjLoader,
-    objects::{
+    primatives::{
         Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
         RotationAxis, Sphere, Translate, Triangle,
     },

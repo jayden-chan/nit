@@ -1,6 +1,6 @@
 use std::fmt::Debug;
 
-use crate::{objects::Hit, ray::Ray, Vector};
+use crate::{primatives::Hit, ray::Ray, Vector};
 
 mod dielectric;
 pub use dielectric::*;

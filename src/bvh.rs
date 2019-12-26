@@ -1,6 +1,6 @@
 use crate::{
     aabb::Aabb,
-    objects::{Hit, Hittable},
+    primatives::{Hit, Hittable},
     ray::Ray,
 };
 

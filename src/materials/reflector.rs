@@ -1,7 +1,7 @@
 use crate::{
     materials::{Material, Scatter},
     math::vector_reflect,
-    objects::Hit,
+    primatives::Hit,
     ray::Ray,
     Vector,
 };

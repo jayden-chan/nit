@@ -1,7 +1,7 @@
 use crate::{
     materials::{Material, Scatter},
     math::random_on_unit_sphere,
-    objects::Hit,
+    primatives::Hit,
     ray::Ray,
     Vector,
 };
