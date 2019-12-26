@@ -9,10 +9,10 @@ mod config;
 mod image;
 mod materials;
 mod math;
-mod obj_loader;
 mod objects;
 mod ray;
 mod renderer;
+mod stl_loader;
 mod vector3;
 
 use crate::config::*;

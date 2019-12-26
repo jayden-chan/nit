@@ -83,11 +83,12 @@ impl ObjLoader {
             .split_whitespace()
             .skip(1)
             .map(read_index)
-            .collect::<Result<Vec<usize>, num::ParseIntError>>()?;
+            .collect::<Vec<usize>>();
 
         if inds.len() != 3 {
             return Err(Box::new(ObjLoadError));
         }
+
         let (a, b, c) = (
             self.points[inds[0]],
             self.points[inds[1]],
@@ -109,13 +110,12 @@ impl ObjLoader {
         fn read_group(
             s: &str,
         ) -> Result<(usize, usize, usize), Box<dyn Error>> {
-            let inds = s
-                .split('/')
-                .map(|s| read_index(s))
-                .collect::<Result<Vec<_>, _>>()?;
+            let inds = s.split('/').map(|s| read_index(s)).collect::<Vec<_>>();
+
             if inds.len() != 3 {
                 return Err(Box::new(ObjLoadError));
             }
+
             Ok((inds[0], inds[1], inds[2]))
         }
 
@@ -136,7 +136,7 @@ impl ObjLoader {
         );
 
         if are_valid_points(a, b, c) {
-            let f = Triangle::with_normals(
+            let f = Triangle::with_normal(
                 self.points[verts[0].0],
                 self.points[verts[1].0],
                 self.points[verts[2].0],
@@ -180,8 +180,8 @@ impl ObjLoader {
     }
 }
 
-fn read_index(s: &str) -> Result<usize, num::ParseIntError> {
-    s.parse::<usize>().map(|i| i - 1)
+fn read_index(s: &str) -> usize {
+    s.parse::<usize>().map(|i| i - 1).unwrap_or(0)
 }
 
 fn are_valid_points(a: Vector, b: Vector, c: Vector) -> bool {

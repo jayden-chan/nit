@@ -60,17 +60,16 @@ impl<M: Material> Triangle<M> {
         }
     }
 
-    pub fn with_normals(
+    pub fn with_normal(
         v0: Vector,
         v1: Vector,
         v2: Vector,
-        norm: f32,
-        vertex_normals: [Vector; 3],
+        normal: Vector,
         material: M,
     ) -> Self {
         let edge1 = v1 - v0;
         let edge2 = v2 - v0;
-        let normal = edge1.cross(edge2).normalize() * norm;
+
         let min_x = f32::min(f32::min(v0.x, v1.x), f32::min(v1.x, v2.x));
         let min_y = f32::min(f32::min(v0.y, v1.y), f32::min(v1.y, v2.y));
         let min_z = f32::min(f32::min(v0.z, v1.z), f32::min(v1.z, v2.z));
@@ -92,7 +91,7 @@ impl<M: Material> Triangle<M> {
             edge1,
             edge2,
             bbox,
-            vertex_normals,
+            vertex_normals: [normal; 3],
         }
     }
 

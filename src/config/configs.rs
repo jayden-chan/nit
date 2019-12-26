@@ -4,11 +4,12 @@ use crate::{
     color::ToneMappingOperator,
     config::{Config, Scene},
     materials::{Dielectric, Diffuse, Light},
-    obj_loader::ObjLoader,
+    // obj_loader::ObjLoader,
     objects::{
         Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
         RotationAxis, Sphere, Translate, Triangle,
     },
+    stl_loader::StlLoader,
     vector3::Vector,
 };
 
@@ -16,35 +17,37 @@ use std::{fs, io};
 
 #[allow(dead_code)]
 pub fn config_obj_bunny() -> Config {
-    let mut file = fs::File::open("test/bunny.obj")
+    let mut file = fs::File::open("test/squirtle_starter_1gen_flowalistik.STL")
         .map(io::BufReader::new)
         .unwrap();
-    let loader = ObjLoader::new();
+
     let mat = Diffuse {
         albedo: Vector::new(0.9, 0.1, 0.1),
     };
-    let mut objects = loader.parse(&mut file, mat).unwrap();
+
+    let mut objects = StlLoader::parse(&mut file, mat);
+
     objects.push(Box::new(Sphere::new(
-        Vector::new(10.0, 14.0, 7.0),
-        4.0,
+        Vector::new(20000.0, 0.0, 0.0),
+        19800.0,
         Light {
             emittance: Vector::new(15.0, 15.0, 15.0),
         },
     )));
 
     let camera_settings = CameraConstructor {
-        look_at: Vector::new(0.0, 0.1, 0.0),
-        look_from: Vector::new(0.0, 0.3, 0.7),
-        vup: Vector::new(0.0, 1.0, 0.0),
-        vfov: 30.0,
+        look_at: Vector::new(0.0, 0.0, 20.0),
+        look_from: Vector::new(120.0, -60.0, 30.0),
+        vup: Vector::new(0.0, 0.0, 1.0),
+        vfov: 45.0,
         aspect_r: 1.0,
         aperture: 0.0,
         focus_dist: 1.0,
     };
 
     Config {
-        resolution: (600, 600),
-        samples: 600,
+        resolution: (100, 100),
+        samples: 100,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::construct(&mut objects),
