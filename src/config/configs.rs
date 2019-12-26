@@ -93,7 +93,8 @@ pub fn config_test_ball() -> Config {
 
 #[allow(dead_code)]
 pub fn config_cornell_box_cubes() -> Config {
-    let mut objects = cornell_box(555.0);
+    let size = 1000.0;
+    let mut objects = cornell_box(size);
 
     objects.push(Box::new(Translate {
         offset: Vector::new(130.0, 0.0, 65.0),
@@ -130,8 +131,8 @@ pub fn config_cornell_box_cubes() -> Config {
         scene: Scene {
             objects: Box::new(HittableList::new(objects)),
             camera: Camera::new(CameraConstructor {
-                look_from: Vector::new(278.0, 278.0, -772.0),
-                look_at: Vector::new(278.0, 278.0, 0.0),
+                look_from: Vector::new(size / 2.0, size / 2.0, -1100.0),
+                look_at: Vector::new(size / 2.0, size / 2.0, 0.0),
                 vup: Vector::new(0.0, 1.0, 0.0),
                 vfov: 40.0,
                 aspect_r: 1.0,

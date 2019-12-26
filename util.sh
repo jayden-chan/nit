@@ -2,25 +2,27 @@
 
 case $1 in
     provision)
-        if [ "$GCP_PROJECT" = "" ] || [ "$GCP_SVC_ACC" ]; then
-            echo "GCP env vars not set"
+        if [ "$GCP_PROJECT" = "" ]; then
+            echo "GCP_PROJECT env var not set"
         fi
 
         gcloud beta compute \
             --project=$GCP_PROJECT \
-            instances create rendering-instance \
+            instances create rendering-instance-96 \
             --zone=us-west1-b \
             --machine-type=custom-96-88576 \
             --subnet=default \
             --network-tier=PREMIUM \
             --maintenance-policy=MIGRATE \
-            --service-account=$GCP_SVC_ACC \
+            --service-account=889861644360-compute@developer.gserviceaccount.com \
             --scopes=https://www.googleapis.com/auth/devstorage.read_only,https://www.googleapis.com/auth/logging.write,https://www.googleapis.com/auth/monitoring.write,https://www.googleapis.com/auth/servicecontrol,https://www.googleapis.com/auth/service.management.readonly,https://www.googleapis.com/auth/trace.append \
-            --image=ubuntu-1804-bionic-v20190911 \
+            --min-cpu-platform="Intel Skylake" \
+            --tags=http9000,http-server,https-server \
+            --image=ubuntu-1804-bionic-v20190918 \
             --image-project=ubuntu-os-cloud \
             --boot-disk-size=10GB \
             --boot-disk-type=pd-standard \
-            --boot-disk-device-name=rendering-instance \
+            --boot-disk-device-name=rendering-instance-96 \
             --reservation-affinity=any
         ;;
     setup)
