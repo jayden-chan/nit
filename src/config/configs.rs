@@ -28,8 +28,8 @@ pub fn config_obj_bunny() -> Config {
     let mut objects = StlLoader::parse(&mut file, mat);
 
     objects.push(Box::new(Sphere::new(
-        Vector::new(20000.0, 0.0, 0.0),
-        19800.0,
+        Vector::new(200.0, 0.0, 0.0),
+        40.0,
         Light {
             emittance: Vector::new(15.0, 15.0, 15.0),
         },
@@ -46,8 +46,8 @@ pub fn config_obj_bunny() -> Config {
     };
 
     Config {
-        resolution: (100, 100),
-        samples: 100,
+        resolution: (400, 400),
+        samples: 400,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::construct(&mut objects),
@@ -93,7 +93,7 @@ pub fn config_test_ball() -> Config {
 
 #[allow(dead_code)]
 pub fn config_cornell_box_cubes() -> Config {
-    let mut objects = cornell_box();
+    let mut objects = cornell_box(555.0);
 
     objects.push(Box::new(Translate {
         offset: Vector::new(130.0, 0.0, 65.0),
@@ -278,7 +278,7 @@ pub fn config_triangle_test() -> Config {
 
 #[allow(dead_code)]
 pub fn config_triangle_test_two() -> Config {
-    let mut objects = cornell_box();
+    let mut objects = cornell_box(555.0);
 
     objects.append(&mut vec![Box::new(Triangle::new(
         Vector::new(555.0 / 2.0, 100.0, 200.0),
@@ -311,7 +311,7 @@ pub fn config_triangle_test_two() -> Config {
 
 #[allow(dead_code)]
 pub fn config_cornell_box() -> Config {
-    let objects = cornell_box();
+    let objects = cornell_box(555.0);
 
     Config {
         resolution: (250, 250),
@@ -333,65 +333,72 @@ pub fn config_cornell_box() -> Config {
 }
 
 #[allow(dead_code)]
-fn cornell_box() -> Vec<Box<dyn Hittable>> {
+fn cornell_box(size: f32) -> Vec<Box<dyn Hittable>> {
     let green = Vector::new(0.12, 0.45, 0.15);
     let red = Vector::new(0.65, 0.05, 0.05);
     let white = Vector::new(0.73, 0.73, 0.73);
 
     vec![
+        // Green wall (left)
         Box::new(Rectangle::<Diffuse, { RectPlane::YZ }>::new(
             0.0,
-            555.0,
+            size,
             0.0,
-            555.0,
-            555.0,
+            size,
+            size,
             -1.0,
             Diffuse { albedo: green },
         )),
+        // Red wall (right)
         Box::new(Rectangle::<Diffuse, { RectPlane::YZ }>::new(
             0.0,
-            555.0,
+            size,
             0.0,
-            555.0,
+            size,
             0.0,
             1.0,
             Diffuse { albedo: red },
         )),
+        // Light
         Box::new(Rectangle::<Light, { RectPlane::XZ }>::new(
-            213.0,
-            343.0,
-            227.0,
-            332.0,
-            554.9,
+            // Magic numbers Pepega Clap
+            size / 2.60563380281690140845,
+            size / 1.61807580174927113702,
+            size / 2.44493392070484581497,
+            size / 1.67168674698795180722,
+            size - 0.01,
             -1.0,
             Light {
                 emittance: Vector::new(25.2 / 2.0, 18.7 / 2.0, 6.0 / 2.0),
             },
         )),
+        // Ceiling
         Box::new(Rectangle::<Diffuse, { RectPlane::XZ }>::new(
             0.0,
-            555.0,
+            size,
             0.0,
-            555.0,
-            555.0,
+            size,
+            size,
             -1.0,
             Diffuse { albedo: white },
         )),
+        // Floor
         Box::new(Rectangle::<Diffuse, { RectPlane::XZ }>::new(
             0.0,
-            555.0,
+            size,
             0.0,
-            555.0,
+            size,
             0.0,
             1.0,
             Diffuse { albedo: white },
         )),
+        // Back wall
         Box::new(Rectangle::<Diffuse, { RectPlane::XY }>::new(
             0.0,
-            555.0,
+            size,
             0.0,
-            555.0,
-            555.0,
+            size,
+            size,
             -1.0,
             Diffuse { albedo: white },
         )),

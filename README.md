@@ -6,6 +6,10 @@ Nit is a path tracing renderer built with Rust
 <img width="650" height="650" src="https://i.imgur.com/lXpQpBU.png"/>
 </p>
 
+<p align="center">
+<img width="650" height="650" src="https://i.imgur.com/SLJWq7z.png"/>
+</p>
+
 ## Project Roadmap
 
 Tentative plan for the program
@@ -13,7 +17,7 @@ Tentative plan for the program
 ### Object Primitives
 - [x] Spheres
 - [x] Rectangles
-- [ ] Triangles
+- [x] Triangles
 - [ ] Generic Polygons
 
 ### Materials
@@ -39,7 +43,7 @@ Tentative plan for the program
 - [ ] k-d tree
 
 ### General Features
-- [ ] .obj File loading
+- [x] STL File loading
 - [ ] Photon mapping
 - [ ] Spectral rays
 - [ ] Adaptive sampling

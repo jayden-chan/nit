@@ -24,7 +24,7 @@ impl StlLoader {
             let v2 = stl.vertices[f.vertices[2]];
             let v2 = Vector::new(v2[0], v2[1], v2[2]);
 
-            let normal = Vector::new(f.normal[0], f.normal[1], f.normal[2]);
+            let normal = -Vector::new(f.normal[0], f.normal[1], f.normal[2]);
             ret.push(Box::new(Triangle::with_normal(
                 v0, v1, v2, normal, material,
             )));
