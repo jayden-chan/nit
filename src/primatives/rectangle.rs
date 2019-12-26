@@ -1,4 +1,4 @@
-use super::{Hit, Hittable};
+use super::{Hit, Primative};
 use crate::{aabb::Aabb, materials::Material, ray::Ray, Vector};
 
 #[derive(PartialEq, Eq)]
@@ -66,7 +66,7 @@ impl<M: Material, const P: RectPlane> Rectangle<M, { P }> {
     }
 }
 
-impl<M: Material, const P: RectPlane> Hittable for Rectangle<M, { P }> {
+impl<M: Material, const P: RectPlane> Primative for Rectangle<M, { P }> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let (k_ax, a_ax, b_ax) = self.plane;
 

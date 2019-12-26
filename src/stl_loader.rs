@@ -1,6 +1,6 @@
 use crate::{
     materials::Material,
-    primatives::{Hittable, Triangle},
+    primatives::{Primative, Triangle},
     Vector,
 };
 use std::io;
@@ -8,13 +8,13 @@ use std::io;
 pub struct StlLoader;
 
 impl StlLoader {
-    pub fn parse<M, R>(source: &mut R, material: M) -> Vec<Box<dyn Hittable>>
+    pub fn parse<M, R>(source: &mut R, material: M) -> Vec<Box<dyn Primative>>
     where
         M: 'static + Material + Copy,
         R: io::Read + io::Seek,
     {
         let stl = stl_io::read_stl(source).unwrap();
-        let mut ret: Vec<Box<dyn Hittable>> = Vec::new();
+        let mut ret: Vec<Box<dyn Primative>> = Vec::new();
 
         stl.faces.iter().for_each(|f| {
             let v0 = stl.vertices[f.vertices[0]];

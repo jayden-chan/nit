@@ -3,7 +3,7 @@
 use crate::{
     aabb::Aabb,
     materials::Material,
-    primatives::{Hit, Hittable},
+    primatives::{Hit, Primative},
     ray::Ray,
     Vector,
 };
@@ -18,7 +18,7 @@ pub struct Sphere<M: Material> {
     bbox: Aabb,
 }
 
-impl<M: Material> Hittable for Sphere<M> {
+impl<M: Material> Primative for Sphere<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let oc = r.origin - self.center;
 

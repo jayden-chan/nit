@@ -1,4 +1,4 @@
-use super::{Hit, Hittable};
+use super::{Hit, Primative};
 use crate::{aabb::Aabb, ray::Ray, Vector};
 use std::f32;
 
@@ -10,14 +10,14 @@ pub enum RotationAxis {
 }
 
 #[derive(Debug)]
-pub struct Rotate<H: Hittable, const A: RotationAxis> {
+pub struct Rotate<H: Primative, const A: RotationAxis> {
     hittable: H,
     sin_theta: f32,
     cos_theta: f32,
     bounding_box: Option<Aabb>,
 }
 
-impl<H: Hittable, const A: RotationAxis> Hittable for Rotate<H, { A }> {
+impl<H: Primative, const A: RotationAxis> Primative for Rotate<H, { A }> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let (_, a_axis, b_axis) = match A {
             RotationAxis::X => (0, 1, 2),
@@ -68,7 +68,7 @@ impl<H: Hittable, const A: RotationAxis> Hittable for Rotate<H, { A }> {
     }
 }
 
-impl<H: Hittable, const A: RotationAxis> Rotate<H, { A }> {
+impl<H: Primative, const A: RotationAxis> Rotate<H, { A }> {
     pub fn new(hittable: H, angle: f32) -> Self {
         let rads = (f32::consts::PI / 180.0) * angle;
         let sin_theta = f32::sin(rads);

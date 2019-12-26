@@ -3,7 +3,7 @@
 use crate::{
     aabb::Aabb,
     materials::Material,
-    primatives::{Hit, Hittable},
+    primatives::{Hit, Primative},
     ray::Ray,
     Vector,
 };
@@ -113,7 +113,7 @@ impl<M: Material> Triangle<M> {
     }
 }
 
-impl<M: Material> Hittable for Triangle<M> {
+impl<M: Material> Primative for Triangle<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let h = r.dir.cross(self.edge2);
         let a = self.edge1.dot(h);

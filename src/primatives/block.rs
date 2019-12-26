@@ -1,4 +1,4 @@
-use super::{Hit, Hittable, HittableList, RectPlane, Rectangle};
+use super::{Hit, Primative, HittableList, RectPlane, Rectangle};
 use crate::{aabb::Aabb, materials::Material, ray::Ray, Vector};
 
 #[derive(Debug)]
@@ -9,7 +9,7 @@ pub struct Block<M: Material> {
     material: M,
 }
 
-impl<M: Material> Hittable for Block<M> {
+impl<M: Material> Primative for Block<M> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         self.sides.hit(r, t_min, t_max)
     }
@@ -24,7 +24,7 @@ where
     M: 'static + Material + Copy,
 {
     pub fn new(p0: Vector, p1: Vector, material: M) -> Self {
-        let objects: Vec<Box<dyn Hittable>> = vec![
+        let objects: Vec<Box<dyn Primative>> = vec![
             Box::new(Rectangle::<M, { RectPlane::XY }>::new(
                 p0.x, p1.x, p0.y, p1.y, p1.z, 1.0, material,
             )),

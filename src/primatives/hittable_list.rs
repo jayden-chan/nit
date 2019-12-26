@@ -1,15 +1,15 @@
 use crate::{
     aabb::Aabb,
-    primatives::{Hit, Hittable},
+    primatives::{Hit, Primative},
     ray::Ray,
 };
 
 #[derive(Debug)]
 pub struct HittableList {
-    hittables: Vec<Box<dyn Hittable>>,
+    hittables: Vec<Box<dyn Primative>>,
 }
 
-impl Hittable for HittableList {
+impl Primative for HittableList {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let mut result = None;
         let mut closest_so_far = t_max;
@@ -48,7 +48,7 @@ impl Hittable for HittableList {
 }
 
 impl HittableList {
-    pub fn new(hittables: Vec<Box<dyn Hittable>>) -> Self {
+    pub fn new(hittables: Vec<Box<dyn Primative>>) -> Self {
         Self { hittables }
     }
 }

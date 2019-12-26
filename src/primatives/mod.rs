@@ -41,7 +41,7 @@ pub struct Hit<'a> {
     pub material: &'a dyn Material,
 }
 
-pub trait Hittable: Debug + Send + Sync {
+pub trait Primative: Debug + Send + Sync {
     fn hit(&self, _r: Ray, _t_min: f32, _t_max: f32) -> Option<Hit>;
     fn bounding_box(&self) -> Option<Aabb>;
 }

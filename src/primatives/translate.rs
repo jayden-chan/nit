@@ -1,13 +1,13 @@
-use super::{Hit, Hittable};
+use super::{Hit, Primative};
 use crate::{aabb::Aabb, ray::Ray, Vector};
 
 #[derive(Debug, Copy, Clone)]
-pub struct Translate<H: Hittable> {
+pub struct Translate<H: Primative> {
     pub hittable: H,
     pub offset: Vector,
 }
 
-impl<H: Hittable> Hittable for Translate<H> {
+impl<H: Primative> Primative for Translate<H> {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         let moved_r = Ray {
             origin: r.origin - self.offset,

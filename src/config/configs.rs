@@ -5,7 +5,7 @@ use crate::{
     config::{Config, Scene},
     materials::{Dielectric, Diffuse, Light},
     primatives::{
-        Block, Hittable, HittableList, RectPlane, Rectangle, Rotate,
+        Block, Primative, HittableList, RectPlane, Rectangle, Rotate,
         RotationAxis, Sphere, Translate, Triangle,
     },
     stl_loader::StlLoader,
@@ -333,7 +333,7 @@ pub fn config_cornell_box() -> Config {
 }
 
 #[allow(dead_code)]
-fn cornell_box(size: f32) -> Vec<Box<dyn Hittable>> {
+fn cornell_box(size: f32) -> Vec<Box<dyn Primative>> {
     let green = Vector::new(0.12, 0.45, 0.15);
     let red = Vector::new(0.65, 0.05, 0.05);
     let white = Vector::new(0.73, 0.73, 0.73);

@@ -1,6 +1,6 @@
 use crate::{
     aabb::Aabb,
-    primatives::{Hit, Hittable},
+    primatives::{Hit, Primative},
     ray::Ray,
 };
 
@@ -10,12 +10,12 @@ use std::f32;
 
 #[derive(Debug)]
 pub struct Bvh {
-    left: Box<dyn Hittable>,
-    right: Box<dyn Hittable>,
+    left: Box<dyn Primative>,
+    right: Box<dyn Primative>,
     bounding_box: Aabb,
 }
 
-impl Hittable for Bvh {
+impl Primative for Bvh {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         if self.bounding_box.hit(r, t_min, t_max) {
             return match (
@@ -50,8 +50,8 @@ enum SortAxis {
 }
 
 fn sort_by_axis<const A: SortAxis>(
-    a: &Box<dyn Hittable>,
-    b: &Box<dyn Hittable>,
+    a: &Box<dyn Primative>,
+    b: &Box<dyn Primative>,
 ) -> Ordering {
     let box_left = a.bounding_box().unwrap();
     let box_right = b.bounding_box().unwrap();
@@ -65,8 +65,8 @@ fn sort_by_axis<const A: SortAxis>(
 
 impl Bvh {
     pub fn construct(
-        objects: &mut Vec<Box<dyn Hittable>>,
-    ) -> Box<dyn Hittable> {
+        objects: &mut Vec<Box<dyn Primative>>,
+    ) -> Box<dyn Primative> {
         let axis = (3.0 * random::<f32>()) as u32;
 
         match axis {
