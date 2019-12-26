@@ -1,7 +1,7 @@
 use crate::{
     materials::{Material, Scatter},
     math::{vector_reflect, vector_refract},
-    primatives::Hit,
+    primitives::Intersection,
     ray::Ray,
     Vector,
 };
@@ -28,23 +28,21 @@ fn schlick(cosine: f32, ref_idx: f32) -> f32 {
 }
 
 impl Material for Dielectric {
-    fn scatter(&self, r_in: Ray, hit_record: Hit) -> Option<Scatter> {
-        let reflected = vector_reflect(r_in.dir, hit_record.normal);
+    fn scatter(&self, r_in: Ray, i: Intersection) -> Option<Scatter> {
+        let reflected = vector_reflect(r_in.dir, i.normal);
 
         let (outward_normal, ni_over_nt, cosine) =
-            if r_in.dir.dot(hit_record.normal) > 0.0 {
+            if r_in.dir.dot(i.normal) > 0.0 {
                 (
-                    -hit_record.normal,
+                    -i.normal,
                     self.ref_idx,
-                    self.ref_idx
-                        * r_in.dir.dot(hit_record.normal)
-                        * r_in.dir.inv_mag(),
+                    self.ref_idx * r_in.dir.dot(i.normal) * r_in.dir.inv_mag(),
                 )
             } else {
                 (
-                    hit_record.normal,
+                    i.normal,
                     1.0 / self.ref_idx,
-                    -r_in.dir.dot(hit_record.normal) * r_in.dir.inv_mag(),
+                    -r_in.dir.dot(i.normal) * r_in.dir.inv_mag(),
                 )
             };
 
@@ -59,7 +57,7 @@ impl Material for Dielectric {
         if random::<f32>() >= reflect_probability {
             Some(Scatter {
                 specular: Ray {
-                    origin: hit_record.p,
+                    origin: i.p,
                     dir: refracted.unwrap(),
                 },
                 attenuation: Vector::ones(),
@@ -67,7 +65,7 @@ impl Material for Dielectric {
         } else {
             Some(Scatter {
                 specular: Ray {
-                    origin: hit_record.p,
+                    origin: i.p,
                     dir: reflected,
                 },
                 attenuation: Vector::ones(),

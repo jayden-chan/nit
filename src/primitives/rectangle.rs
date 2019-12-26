@@ -1,5 +1,5 @@
-use super::{Hit, Primative};
-use crate::{aabb::Aabb, materials::Material, ray::Ray, Vector};
+use super::{Intersection, Primitive};
+use crate::{aabb::Aabb, ray::Ray, Vector};
 
 #[derive(PartialEq, Eq)]
 pub enum RectPlane {
@@ -9,28 +9,19 @@ pub enum RectPlane {
 }
 
 #[derive(Debug)]
-pub struct Rectangle<M: Material, const P: RectPlane> {
+pub struct Rectangle<const P: RectPlane> {
     a0: f32,
     a1: f32,
     b0: f32,
     b1: f32,
     k: f32,
     norm: Vector,
-    material: M,
     plane: (usize, usize, usize),
     bbox: Aabb,
 }
 
-impl<M: Material, const P: RectPlane> Rectangle<M, { P }> {
-    pub fn new(
-        a0: f32,
-        a1: f32,
-        b0: f32,
-        b1: f32,
-        k: f32,
-        norm: f32,
-        material: M,
-    ) -> Self {
+impl<const P: RectPlane> Rectangle<{ P }> {
+    pub fn new(a0: f32, a1: f32, b0: f32, b1: f32, k: f32, norm: f32) -> Self {
         Rectangle {
             a0,
             a1,
@@ -42,7 +33,6 @@ impl<M: Material, const P: RectPlane> Rectangle<M, { P }> {
                 RectPlane::YZ => Vector::new(1.0, 0.0, 0.0) * norm,
                 RectPlane::XZ => Vector::new(0.0, 1.0, 0.0) * norm,
             },
-            material,
             plane: match P {
                 RectPlane::XY => (2, 0, 1),
                 RectPlane::YZ => (0, 1, 2),
@@ -66,8 +56,8 @@ impl<M: Material, const P: RectPlane> Rectangle<M, { P }> {
     }
 }
 
-impl<M: Material, const P: RectPlane> Primative for Rectangle<M, { P }> {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
+impl<const P: RectPlane> Primitive for Rectangle<{ P }> {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let (k_ax, a_ax, b_ax) = self.plane;
 
         let t = (self.k - r.origin[k_ax]) / r.dir[k_ax];
@@ -82,13 +72,12 @@ impl<M: Material, const P: RectPlane> Primative for Rectangle<M, { P }> {
             return None;
         }
 
-        Some(Hit {
+        Some(Intersection {
             u: (x - self.a0) / (self.a1 - self.a0),
             v: (y - self.b0) / (self.b1 - self.b0),
             t,
             p: r.point_at_parameter(t),
             normal: self.norm,
-            material: &self.material,
         })
     }
 

@@ -1,7 +1,7 @@
 use crate::{
     materials::{Material, Scatter},
     math::random_on_unit_sphere,
-    primatives::Hit,
+    primitives::Intersection,
     ray::Ray,
     Vector,
 };
@@ -12,12 +12,12 @@ pub struct Diffuse {
 }
 
 impl Material for Diffuse {
-    fn scatter(&self, _r: Ray, hit: Hit) -> Option<Scatter> {
-        let scattered = hit.p + hit.normal + random_on_unit_sphere();
+    fn scatter(&self, _r: Ray, i: Intersection) -> Option<Scatter> {
+        let scattered = i.p + i.normal + random_on_unit_sphere();
 
         let specular = Ray {
-            origin: hit.p,
-            dir: (scattered - hit.p),
+            origin: i.p,
+            dir: (scattered - i.p),
         };
 
         Some(Scatter {

@@ -59,19 +59,14 @@ pub fn trace(r: Ray, scene: &Scene) -> Vector {
 
         match hit_result {
             None => return Vector::zeros(),
-            Some(hit) => {
-                let scattered = hit.material.scatter(curr_ray, hit);
-                let emitted = hit.material.emitted(curr_ray, hit);
-
-                match scattered {
-                    None => return curr_att * (total_emitted + emitted),
-                    Some(scatter) => {
-                        curr_ray = scatter.specular;
-                        curr_att *= scatter.attenuation;
-                        total_emitted += emitted;
-                    }
+            Some(hit) => match hit.scattered {
+                None => return curr_att * (total_emitted + hit.emitted),
+                Some(scatter) => {
+                    curr_ray = scatter.specular;
+                    curr_att *= scatter.attenuation;
+                    total_emitted += hit.emitted;
                 }
-            }
+            },
         }
     }
 

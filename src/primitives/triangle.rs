@@ -2,8 +2,7 @@
 
 use crate::{
     aabb::Aabb,
-    materials::Material,
-    primatives::{Hit, Primative},
+    primitives::{Intersection, Primitive},
     ray::Ray,
     Vector,
 };
@@ -11,26 +10,19 @@ use crate::{
 const EPSILON: f32 = 0.0000001;
 
 #[derive(Debug)]
-pub struct Triangle<M: Material> {
+pub struct Triangle {
     v0: Vector,
     v1: Vector,
     v2: Vector,
     vertex_normals: [Vector; 3],
     normal: Vector,
-    material: M,
     edge1: Vector,
     edge2: Vector,
     bbox: Aabb,
 }
 
-impl<M: Material> Triangle<M> {
-    pub fn new(
-        v0: Vector,
-        v1: Vector,
-        v2: Vector,
-        norm: f32,
-        material: M,
-    ) -> Self {
+impl Triangle {
+    pub fn new(v0: Vector, v1: Vector, v2: Vector, norm: f32) -> Self {
         let edge1 = v1 - v0;
         let edge2 = v2 - v0;
         let normal = edge1.cross(edge2).normalize() * norm;
@@ -52,7 +44,6 @@ impl<M: Material> Triangle<M> {
             v1,
             v2,
             normal,
-            material,
             edge1,
             edge2,
             bbox,
@@ -65,7 +56,6 @@ impl<M: Material> Triangle<M> {
         v1: Vector,
         v2: Vector,
         normal: Vector,
-        material: M,
     ) -> Self {
         let edge1 = v1 - v0;
         let edge2 = v2 - v0;
@@ -87,7 +77,6 @@ impl<M: Material> Triangle<M> {
             v1,
             v2,
             normal,
-            material,
             edge1,
             edge2,
             bbox,
@@ -113,8 +102,8 @@ impl<M: Material> Triangle<M> {
     }
 }
 
-impl<M: Material> Primative for Triangle<M> {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
+impl Primitive for Triangle {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let h = r.dir.cross(self.edge2);
         let a = self.edge1.dot(h);
 
@@ -139,13 +128,12 @@ impl<M: Material> Primative for Triangle<M> {
 
         let t = f * self.edge2.dot(q);
         if t > EPSILON && t < 1.0 / EPSILON && t > t_min && t < t_max {
-            return Some(Hit {
+            return Some(Intersection {
                 u,
                 v,
                 t,
                 p: r.origin + r.dir * t,
                 normal: self.normal,
-                material: &self.material,
             });
         } else {
             return None;

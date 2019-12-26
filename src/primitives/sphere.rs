@@ -2,8 +2,7 @@
 
 use crate::{
     aabb::Aabb,
-    materials::Material,
-    primatives::{Hit, Primative},
+    primitives::{Intersection, Primitive},
     ray::Ray,
     Vector,
 };
@@ -11,15 +10,14 @@ use crate::{
 use std::f32::consts::PI;
 
 #[derive(Debug)]
-pub struct Sphere<M: Material> {
+pub struct Sphere {
     center: Vector,
     radius: f32,
-    material: M,
     bbox: Aabb,
 }
 
-impl<M: Material> Primative for Sphere<M> {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
+impl Primitive for Sphere {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let oc = r.origin - self.center;
 
         let a = r.dir.dot(r.dir);
@@ -39,13 +37,12 @@ impl<M: Material> Primative for Sphere<M> {
                 let point_at_parameter = r.point_at_parameter(q_eq);
                 let (u, v) =
                     sphere_uv((point_at_parameter - self.center) / self.radius);
-                return Some(Hit {
+                return Some(Intersection {
                     u,
                     v,
                     t: q_eq,
                     p: point_at_parameter,
                     normal: (point_at_parameter - self.center) / self.radius,
-                    material: &self.material,
                 });
             }
         }
@@ -58,12 +55,11 @@ impl<M: Material> Primative for Sphere<M> {
     }
 }
 
-impl<M: Material> Sphere<M> {
-    pub fn new(center: Vector, radius: f32, material: M) -> Self {
+impl Sphere {
+    pub fn new(center: Vector, radius: f32) -> Self {
         Self {
             center,
             radius,
-            material,
             bbox: Aabb::new(
                 center - Vector::new(radius, radius, radius),
                 center + Vector::new(radius, radius, radius),

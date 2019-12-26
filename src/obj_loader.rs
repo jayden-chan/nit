@@ -5,7 +5,7 @@
  */
 use crate::{
     materials::Material,
-    primatives::{Hittable, Triangle},
+    primitives::{Hittable, Triangle},
     Vector,
 };
 

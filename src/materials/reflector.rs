@@ -1,7 +1,7 @@
 use crate::{
     materials::{Material, Scatter},
     math::vector_reflect,
-    primatives::Hit,
+    primitives::Intersection,
     ray::Ray,
     Vector,
 };
@@ -12,15 +12,15 @@ pub struct Reflector {
 }
 
 impl Material for Reflector {
-    fn scatter(&self, r: Ray, hit: Hit) -> Option<Scatter> {
-        let reflected = vector_reflect(r.dir.normalize(), hit.normal);
+    fn scatter(&self, r: Ray, i: Intersection) -> Option<Scatter> {
+        let reflected = vector_reflect(r.dir.normalize(), i.normal);
 
         let specular = Ray {
-            origin: hit.p,
+            origin: i.p,
             dir: reflected,
         };
 
-        if specular.dir.dot(hit.normal) > 0.0 {
+        if specular.dir.dot(i.normal) > 0.0 {
             Some(Scatter {
                 specular,
                 attenuation: self.albedo,

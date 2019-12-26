@@ -1,14 +1,14 @@
-use super::{Hit, Primative};
+use super::{Intersection, Primitive};
 use crate::{aabb::Aabb, ray::Ray, Vector};
 
 #[derive(Debug, Copy, Clone)]
-pub struct Translate<H: Primative> {
+pub struct Translate<H: Primitive> {
     pub hittable: H,
     pub offset: Vector,
 }
 
-impl<H: Primative> Primative for Translate<H> {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
+impl<H: Primitive> Primitive for Translate<H> {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let moved_r = Ray {
             origin: r.origin - self.offset,
             dir: r.dir,

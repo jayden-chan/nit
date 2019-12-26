@@ -1,11 +1,11 @@
 mod configs;
 pub use configs::*;
 
-use crate::{camera::Camera, color::ToneMappingOperator, primatives::Primative};
+use crate::{bvh::Bvh, camera::Camera, color::ToneMappingOperator};
 
 #[derive(Debug)]
 pub struct Scene {
-    pub objects: Box<dyn Primative>,
+    pub objects: Bvh,
     pub camera: Camera,
 }
 

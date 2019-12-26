@@ -1,6 +1,7 @@
 use crate::{
     aabb::Aabb,
-    primatives::{Hit, Primative},
+    object::{Hit, Object},
+    primitives::{Intersection, Primitive},
     ray::Ray,
 };
 
@@ -10,25 +11,98 @@ use std::f32;
 
 #[derive(Debug)]
 pub struct Bvh {
-    left: Box<dyn Primative>,
-    right: Box<dyn Primative>,
+    children: Option<(Box<Bvh>, Box<Bvh>)>,
+    left_leaf: Option<Object>,
+    right_leaf: Option<Object>,
     bounding_box: Aabb,
 }
 
-impl Primative for Bvh {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
+// pub struct Bvh<'a> {
+//     left: Object<'a>,
+//     right: Object<'a>,
+//     bounding_box: Aabb,
+// }
+
+impl Bvh {
+    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         if self.bounding_box.hit(r, t_min, t_max) {
-            return match (
-                self.left.hit(r, t_min, t_max),
-                self.right.hit(r, t_min, t_max),
-            ) {
-                (None, None) => None,
-                (Some(rec), None) | (None, Some(rec)) => Some(rec),
-                (Some(rec_l), Some(rec_r)) => {
-                    if rec_l.t < rec_r.t {
-                        Some(rec_l)
+            let mut curr = self;
+            if curr.children.is_some() {
+                loop {
+                    let (left, right) = curr.children.as_ref().unwrap();
+                    let next = match (
+                        left.hit(r, t_min, t_max),
+                        right.hit(r, t_min, t_max),
+                    ) {
+                        (None, None) => None,
+                        (Some(_), None) => Some(left),
+                        (None, Some(_)) => Some(right),
+                        (Some(rec_l), Some(rec_r)) => {
+                            if rec_l.intersection.t < rec_r.intersection.t {
+                                Some(left)
+                            } else {
+                                Some(right)
+                            }
+                        }
+                    };
+
+                    if next.is_some() {
+                        curr = &next.unwrap();
+                        if curr.children.is_none() {
+                            break;
+                        }
                     } else {
-                        Some(rec_r)
+                        break;
+                    }
+                }
+            }
+
+            return match (curr.left_leaf.as_ref(), curr.right_leaf.as_ref()) {
+                (None, None) => None,
+                (Some(leaf), None) | (None, Some(leaf)) => {
+                    leaf.primitive.hit(r, t_min, t_max).map(|h| Hit {
+                        intersection: h,
+                        scattered: leaf.material.scatter(r, h),
+                        emitted: leaf.material.emitted(r, h),
+                    })
+                }
+                (Some(left_leaf), Some(right_leaf)) => {
+                    match (
+                        left_leaf.primitive.hit(r, t_min, t_max),
+                        right_leaf.primitive.hit(r, t_min, t_max),
+                    ) {
+                        (None, None) => None,
+                        (Some(h), None) => Some(Hit {
+                            intersection: h,
+                            scattered: left_leaf.material.scatter(r, h),
+                            emitted: left_leaf.material.emitted(r, h),
+                        }),
+                        (None, Some(h)) => Some(Hit {
+                            intersection: h,
+                            scattered: right_leaf.material.scatter(r, h),
+                            emitted: right_leaf.material.emitted(r, h),
+                        }),
+                        (Some(h_l), Some(h_r)) => {
+                            if h_l.t < h_r.t {
+                                Some(Hit {
+                                    intersection: h_l,
+                                    scattered: left_leaf
+                                        .material
+                                        .scatter(r, h_l),
+                                    emitted: left_leaf.material.emitted(r, h_l),
+                                })
+                            } else {
+                                Some(Hit {
+                                    intersection: h_r,
+                                    scattered: right_leaf
+                                        .material
+                                        .scatter(r, h_r),
+                                    emitted: right_leaf
+                                        .material
+                                        .emitted(r, h_r),
+                                })
+                            }
+                        }
                     }
                 }
             };
@@ -49,12 +123,9 @@ enum SortAxis {
     Z = 2,
 }
 
-fn sort_by_axis<const A: SortAxis>(
-    a: &Box<dyn Primative>,
-    b: &Box<dyn Primative>,
-) -> Ordering {
-    let box_left = a.bounding_box().unwrap();
-    let box_right = b.bounding_box().unwrap();
+fn sort_by_axis<const A: SortAxis>(a: &Object, b: &Object) -> Ordering {
+    let box_left = a.primitive.bounding_box().unwrap();
+    let box_right = b.primitive.bounding_box().unwrap();
 
     if box_left.min[A as usize] - box_right.min[A as usize] < 0.0 {
         Ordering::Less
@@ -64,9 +135,7 @@ fn sort_by_axis<const A: SortAxis>(
 }
 
 impl Bvh {
-    pub fn construct(
-        objects: &mut Vec<Box<dyn Primative>>,
-    ) -> Box<dyn Primative> {
+    pub fn construct(mut objects: Vec<Object>) -> Self {
         let axis = (3.0 * random::<f32>()) as u32;
 
         match axis {
@@ -83,22 +152,47 @@ impl Bvh {
 
         match objects.len() {
             0 => panic!("wrong bvh length"),
-            1 => objects.remove(0),
-            l => {
-                let l_vec = objects;
-                let mut r_vec = l_vec.split_off(l / 2);
-                let left = Self::construct(l_vec);
-                let right = Self::construct(&mut r_vec);
-
-                let box_left = left.bounding_box().unwrap();
-                let box_right = right.bounding_box().unwrap();
+            1 => {
+                let obj = objects.remove(0);
+                let bounding_box = obj.primitive.bounding_box().unwrap();
+                return Self {
+                    children: None,
+                    left_leaf: Some(obj),
+                    right_leaf: None,
+                    bounding_box,
+                };
+            }
+            2 => {
+                let left = objects.remove(0);
+                let right = objects.remove(0);
+                let box_left = left.primitive.bounding_box().unwrap();
+                let box_right = right.primitive.bounding_box().unwrap();
 
                 let bounding_box = Aabb::surrounding_box(box_left, box_right);
-                Box::new(Self {
-                    left,
-                    right,
+                return Self {
+                    children: None,
+                    left_leaf: Some(left),
+                    right_leaf: Some(right),
                     bounding_box,
-                })
+                };
+            }
+            l => {
+                let mut l_vec = objects;
+                let r_vec = l_vec.split_off(l / 2);
+                let left = Self::construct(l_vec);
+                let right = Self::construct(r_vec);
+
+                let bounding_box = Aabb::surrounding_box(
+                    left.bounding_box,
+                    right.bounding_box,
+                );
+
+                Self {
+                    children: Some((Box::new(left), Box::new(right))),
+                    left_leaf: None,
+                    right_leaf: None,
+                    bounding_box,
+                }
             }
         }
     }

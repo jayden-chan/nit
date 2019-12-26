@@ -1,16 +1,16 @@
 use crate::{
     aabb::Aabb,
-    primatives::{Hit, Primative},
+    primitives::{Intersection, Primitive},
     ray::Ray,
 };
 
 #[derive(Debug)]
 pub struct HittableList {
-    hittables: Vec<Box<dyn Primative>>,
+    hittables: Vec<Box<dyn Primitive>>,
 }
 
-impl Primative for HittableList {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
+impl Primitive for HittableList {
+    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let mut result = None;
         let mut closest_so_far = t_max;
 
@@ -48,7 +48,7 @@ impl Primative for HittableList {
 }
 
 impl HittableList {
-    pub fn new(hittables: Vec<Box<dyn Primative>>) -> Self {
+    pub fn new(hittables: Vec<Box<dyn Primitive>>) -> Self {
         Self { hittables }
     }
 }
