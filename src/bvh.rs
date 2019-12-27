@@ -17,12 +17,6 @@ pub struct Bvh {
     bounding_box: Aabb,
 }
 
-// pub struct Bvh<'a> {
-//     left: Object<'a>,
-//     right: Object<'a>,
-//     bounding_box: Aabb,
-// }
-
 impl Bvh {
     pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         if self.bounding_box.hit(r, t_min, t_max) {

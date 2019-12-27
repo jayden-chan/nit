@@ -22,7 +22,7 @@ pub fn render(image: &mut ImageBuffer, config: Config) {
     image.buffer.iter_mut().for_each(|row| {
         progress_bar(done_rows, height);
 
-        row.iter_mut().for_each(|pixel| {
+        row.par_iter_mut().for_each(|pixel| {
             let mut curr_pixel = Vector::zeros();
             let mut rng = rand::thread_rng();
 

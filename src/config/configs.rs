@@ -38,23 +38,21 @@ pub fn config_obj_bunny() -> Config {
         }),
     });
 
-    let camera_settings = CameraConstructor {
-        look_at: Vector::new(0.0, 0.0, 20.0),
-        look_from: Vector::new(120.0, -60.0, 30.0),
-        vup: Vector::new(0.0, 0.0, 1.0),
-        vfov: 45.0,
-        aspect_r: 1.0,
-        aperture: 0.0,
-        focus_dist: 1.0,
-    };
-
     Config {
         resolution: (150, 150),
         samples: 100,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::construct(objects),
-            camera: Camera::new(camera_settings),
+            camera: Camera::new(CameraConstructor {
+                look_at: Vector::new(-30.0, 10.0, 20.0),
+                look_from: Vector::new(120.0, -60.0, 30.0),
+                vup: Vector::new(0.0, 0.0, 1.0),
+                vfov: 35.0,
+                aspect_r: 1.0,
+                aperture: 0.0,
+                focus_dist: 1.0,
+            }),
         },
     }
 }
