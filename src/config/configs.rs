@@ -3,7 +3,7 @@ use crate::{
     camera::{Camera, CameraConstructor},
     color::ToneMappingOperator,
     config::{Config, Scene},
-    materials::{Dielectric, Diffuse, Light},
+    materials::{Dielectric, Diffuse, Light, Reflector},
     object::Object,
     primitives::{
         Block, HittableList, Primitive, RectPlane, Rectangle, Rotate,
@@ -12,6 +12,15 @@ use crate::{
     stl_loader::StlLoader,
     vector3::Vector,
 };
+
+#[allow(dead_code)]
+const R_240: (usize, usize) = (240, 135);
+#[allow(dead_code)]
+const R_480: (usize, usize) = (480, 270);
+#[allow(dead_code)]
+const R_1600: (usize, usize) = (1600, 900);
+#[allow(dead_code)]
+const R_1920: (usize, usize) = (1920, 1080);
 
 use std::{fs, io};
 
@@ -32,6 +41,24 @@ pub fn config_obj_bunny() -> Config {
         .collect();
 
     objects.push(Object {
+        primitive: Box::new(Rectangle::<{ RectPlane::XY }>::new(
+            -100000.0, 100000.0, -100000.0, 100000.0, -1.0, 1.0,
+        )),
+        material: Box::new(Diffuse {
+            albedo: Vector::new(0.73, 0.73, 0.73),
+        }),
+    });
+
+    objects.push(Object {
+        primitive: Box::new(Rectangle::<{ RectPlane::YZ }>::new(
+            -100000.0, 100000.0, -100000.0, 100000.0, -50.0, 1.0,
+        )),
+        material: Box::new(Reflector {
+            albedo: Vector::new(0.73, 0.73, 0.73),
+        }),
+    });
+
+    objects.push(Object {
         primitive: Box::new(Sphere::new(Vector::new(200.0, 0.0, 0.0), 40.0)),
         material: Box::new(Light {
             emittance: Vector::new(15.0, 15.0, 15.0),
@@ -39,17 +66,17 @@ pub fn config_obj_bunny() -> Config {
     });
 
     Config {
-        resolution: (150, 150),
+        resolution: R_240,
         samples: 100,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::construct(objects),
             camera: Camera::new(CameraConstructor {
-                look_at: Vector::new(-30.0, 10.0, 20.0),
+                look_at: Vector::new(-90.0, 10.0, 20.0),
                 look_from: Vector::new(120.0, -60.0, 30.0),
                 vup: Vector::new(0.0, 0.0, 1.0),
-                vfov: 35.0,
-                aspect_r: 1.0,
+                vfov: 30.0,
+                aspect_r: 16.0 / 9.0,
                 aperture: 0.0,
                 focus_dist: 1.0,
             }),
