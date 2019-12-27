@@ -51,7 +51,7 @@ pub fn config_obj_bunny() -> Config {
 
     objects.push(Object {
         primitive: Box::new(Rectangle::<{ RectPlane::YZ }>::new(
-            -100000.0, 100000.0, -100000.0, 100000.0, -50.0, 1.0,
+            -100000.0, 100000.0, 1.0, 100000.0, -50.0, 1.0,
         )),
         material: Box::new(Reflector {
             albedo: Vector::new(0.73, 0.73, 0.73),
@@ -59,15 +59,20 @@ pub fn config_obj_bunny() -> Config {
     });
 
     objects.push(Object {
-        primitive: Box::new(Sphere::new(Vector::new(200.0, 0.0, 0.0), 40.0)),
+        primitive: Box::new(Sphere::new(Vector::new(20.0, 0.0, 120.0), 15.0)),
         material: Box::new(Light {
-            emittance: Vector::new(15.0, 15.0, 15.0),
+            emittance: Vector::new(15.0, 14.0, 12.0),
         }),
     });
 
+    objects.push(Object {
+        primitive: Box::new(Sphere::new(Vector::new(3.0, -30.0, 8.0), 8.0)),
+        material: Box::new(Dielectric { ref_idx: 1.52 }),
+    });
+
     Config {
-        resolution: R_240,
-        samples: 100,
+        resolution: R_1920,
+        samples: 12000,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::construct(objects),
