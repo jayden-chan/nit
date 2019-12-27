@@ -6,9 +6,7 @@ Nit is a path tracing renderer built with Rust
 <img width="650" height="650" src="https://i.imgur.com/lXpQpBU.png"/>
 </p>
 
-<p align="center">
-<img width="650" height="650" src="https://i.imgur.com/SLJWq7z.png"/>
-</p>
+![](https://i.imgur.com/52RFc5S.png)
 
 ## Project Roadmap
 
