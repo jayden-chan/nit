@@ -40,6 +40,11 @@ case $1 in
         && ./target/release/nit $2 out/image.ppm \
         && feh --auto-zoom --force-aliasing out/image.ppm
         ;;
+    profile)
+        python gptd.py --format=callgrind --output=out.dot callgrind.out
+        dot -Tps out.dot -o out.pdf
+        evince out.pdf
+        ;;
     connect)
         ssh -i ~/.ssh/gcp_ssh jayden@$GCP_VM_IP
         ;;
