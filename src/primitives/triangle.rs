@@ -14,7 +14,6 @@ pub struct Triangle {
     v0: Vector,
     v1: Vector,
     v2: Vector,
-    vertex_normals: [Vector; 3],
     normal: Vector,
     edge1: Vector,
     edge2: Vector,
@@ -47,7 +46,6 @@ impl Triangle {
             edge1,
             edge2,
             bbox,
-            vertex_normals: [normal; 3],
         }
     }
 
@@ -80,25 +78,7 @@ impl Triangle {
             edge1,
             edge2,
             bbox,
-            vertex_normals: [normal; 3],
         }
-    }
-
-    fn local_coordinates(&self, point: Vector) -> (f32, f32, f32) {
-        let ort_ac = self.edge2.cross(self.normal);
-        let ort_ab = self.edge1.cross(self.normal);
-        let point = point - self.v0;
-        let alpha = point.dot(ort_ac) / self.edge1.dot(ort_ac);
-        let beta = point.dot(ort_ab) / self.edge2.dot(ort_ab);
-        let gamma = 1.0 - (alpha + beta);
-        (alpha, beta, gamma)
-    }
-
-    fn interpolate_normal(&self, alpha: f32, beta: f32, gamma: f32) -> Vector {
-        return (alpha * self.vertex_normals[1]
-            + beta * self.vertex_normals[2]
-            + gamma * self.vertex_normals[0])
-            .normalize();
     }
 }
 

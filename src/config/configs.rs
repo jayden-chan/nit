@@ -26,9 +26,11 @@ use std::{fs, io};
 
 #[allow(dead_code)]
 pub fn config_obj_bunny() -> Config {
-    let mut file = fs::File::open("test/squirtle_starter_1gen_flowalistik.STL")
+    println!("Loading STL file");
+    let mut file = fs::File::open("test/sotvl_Spiral-Vase.stl")
         .map(io::BufReader::new)
         .unwrap();
+    println!("Finished");
 
     let mut objects: Vec<Object> = StlLoader::parse(&mut file)
         .into_iter()
@@ -49,14 +51,14 @@ pub fn config_obj_bunny() -> Config {
         }),
     });
 
-    objects.push(Object {
-        primitive: Box::new(Rectangle::<{ RectPlane::YZ }>::new(
-            -100000.0, 100000.0, 1.0, 100000.0, -50.0, 1.0,
-        )),
-        material: Box::new(Reflector {
-            albedo: Vector::new(0.73, 0.73, 0.73),
-        }),
-    });
+    // objects.push(Object {
+    //     primitive: Box::new(Rectangle::<{ RectPlane::YZ }>::new(
+    //         -100000.0, 100000.0, 1.0, 100000.0, -50.0, 1.0,
+    //     )),
+    //     material: Box::new(Reflector {
+    //         albedo: Vector::new(0.73, 0.73, 0.73),
+    //     }),
+    // });
 
     objects.push(Object {
         primitive: Box::new(Sphere::new(Vector::new(20.0, 0.0, 120.0), 15.0)),
@@ -65,14 +67,17 @@ pub fn config_obj_bunny() -> Config {
         }),
     });
 
-    objects.push(Object {
-        primitive: Box::new(Sphere::new(Vector::new(3.0, -30.0, 8.0), 8.0)),
-        material: Box::new(Dielectric { ref_idx: 1.52 }),
-    });
+    // objects.push(Object {
+    //     primitive: Box::new(Sphere::new(Vector::new(3.0, -30.0, 8.0), 8.0)),
+    //     material: Box::new(Dielectric { ref_idx: 1.52 }),
+    // });
+
+    println!("Constructing BVH");
+    println!("Objects: {}", objects.len());
 
     Config {
-        resolution: R_1920,
-        samples: 12000,
+        resolution: R_240,
+        samples: 100,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::construct(objects),
@@ -80,7 +85,7 @@ pub fn config_obj_bunny() -> Config {
                 look_at: Vector::new(-90.0, 10.0, 20.0),
                 look_from: Vector::new(120.0, -60.0, 30.0),
                 vup: Vector::new(0.0, 0.0, 1.0),
-                vfov: 30.0,
+                vfov: 60.0,
                 aspect_r: 16.0 / 9.0,
                 aperture: 0.0,
                 focus_dist: 1.0,

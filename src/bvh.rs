@@ -10,103 +10,71 @@ use std::cmp::Ordering;
 use std::f32;
 
 #[derive(Debug)]
+enum BvhNodeType {
+    Internal((Box<Bvh>, Box<Bvh>)),
+    SingleLeaf(Object),
+    DoubleLeaf((Object, Object)),
+}
+
+#[derive(Debug)]
 pub struct Bvh {
-    children: Option<(Box<Bvh>, Box<Bvh>)>,
-    left_leaf: Option<Object>,
-    right_leaf: Option<Object>,
+    node_type: BvhNodeType,
     bounding_box: Aabb,
 }
 
 impl Bvh {
     pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         if self.bounding_box.hit(r, t_min, t_max) {
-            let mut curr = self;
-            if curr.children.is_some() {
-                loop {
-                    let (left, right) = curr.children.as_ref().unwrap();
-                    let next = match (
+            match &self.node_type {
+                BvhNodeType::Internal((left, right)) => {
+                    match (
                         left.hit(r, t_min, t_max),
                         right.hit(r, t_min, t_max),
                     ) {
-                        (None, None) => None,
-                        (Some(_), None) => Some(left),
-                        (None, Some(_)) => Some(right),
-                        (Some(rec_l), Some(rec_r)) => {
-                            if rec_l.intersection.t < rec_r.intersection.t {
-                                Some(left)
+                        (None, None) => return None,
+                        (Some(h), None) | (None, Some(h)) => return Some(h),
+                        (Some(h_l), Some(h_r)) => {
+                            if h_l.intersection.t < h_r.intersection.t {
+                                return Some(h_l);
                             } else {
-                                Some(right)
+                                return Some(h_r);
                             }
                         }
-                    };
-
-                    if next.is_some() {
-                        curr = &next.unwrap();
-                        if curr.children.is_none() {
-                            break;
-                        }
-                    } else {
-                        break;
                     }
                 }
-            }
-
-            return match (curr.left_leaf.as_ref(), curr.right_leaf.as_ref()) {
-                (None, None) => None,
-                (Some(leaf), None) | (None, Some(leaf)) => {
-                    leaf.primitive.hit(r, t_min, t_max).map(|h| Hit {
-                        intersection: h,
-                        scattered: leaf.material.scatter(r, h),
-                        emitted: leaf.material.emitted(r, h),
-                    })
+                BvhNodeType::SingleLeaf(l) => {
+                    return l.primitive.hit(r, t_min, t_max).map(|i| Hit {
+                        intersection: i,
+                        scattered: l.material.scatter(r, i),
+                        emitted: l.material.emitted(r, i),
+                    });
                 }
-                (Some(left_leaf), Some(right_leaf)) => {
-                    match (
-                        left_leaf.primitive.hit(r, t_min, t_max),
-                        right_leaf.primitive.hit(r, t_min, t_max),
+                BvhNodeType::DoubleLeaf((left, right)) => {
+                    return (match (
+                        left.primitive.hit(r, t_min, t_max),
+                        right.primitive.hit(r, t_min, t_max),
                     ) {
                         (None, None) => None,
-                        (Some(h), None) => Some(Hit {
-                            intersection: h,
-                            scattered: left_leaf.material.scatter(r, h),
-                            emitted: left_leaf.material.emitted(r, h),
-                        }),
-                        (None, Some(h)) => Some(Hit {
-                            intersection: h,
-                            scattered: right_leaf.material.scatter(r, h),
-                            emitted: right_leaf.material.emitted(r, h),
-                        }),
-                        (Some(h_l), Some(h_r)) => {
-                            if h_l.t < h_r.t {
-                                Some(Hit {
-                                    intersection: h_l,
-                                    scattered: left_leaf
-                                        .material
-                                        .scatter(r, h_l),
-                                    emitted: left_leaf.material.emitted(r, h_l),
-                                })
+                        (Some(i), None) => Some((i, &left.material)),
+                        (None, Some(i)) => Some((i, &right.material)),
+                        (Some(i_l), Some(i_r)) => {
+                            if i_l.t < i_r.t {
+                                Some((i_l, &left.material))
                             } else {
-                                Some(Hit {
-                                    intersection: h_r,
-                                    scattered: right_leaf
-                                        .material
-                                        .scatter(r, h_r),
-                                    emitted: right_leaf
-                                        .material
-                                        .emitted(r, h_r),
-                                })
+                                Some((i_r, &right.material))
                             }
                         }
-                    }
+                    })
+                    .map(|(i, m)| Hit {
+                        intersection: i,
+                        scattered: m.scatter(r, i),
+                        emitted: m.emitted(r, i),
+                    });
                 }
-            };
+            }
         }
 
         None
-    }
-
-    fn bounding_box(&self) -> Option<Aabb> {
-        Some(self.bounding_box)
     }
 }
 
@@ -150,9 +118,7 @@ impl Bvh {
                 let obj = objects.remove(0);
                 let bounding_box = obj.primitive.bounding_box().unwrap();
                 return Self {
-                    children: None,
-                    left_leaf: Some(obj),
-                    right_leaf: None,
+                    node_type: BvhNodeType::SingleLeaf(obj),
                     bounding_box,
                 };
             }
@@ -164,9 +130,7 @@ impl Bvh {
 
                 let bounding_box = Aabb::surrounding_box(box_left, box_right);
                 return Self {
-                    children: None,
-                    left_leaf: Some(left),
-                    right_leaf: Some(right),
+                    node_type: BvhNodeType::DoubleLeaf((left, right)),
                     bounding_box,
                 };
             }
@@ -182,9 +146,10 @@ impl Bvh {
                 );
 
                 Self {
-                    children: Some((Box::new(left), Box::new(right))),
-                    left_leaf: None,
-                    right_leaf: None,
+                    node_type: BvhNodeType::Internal((
+                        Box::new(left),
+                        Box::new(right),
+                    )),
                     bounding_box,
                 }
             }
