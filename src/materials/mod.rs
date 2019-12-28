@@ -3,16 +3,9 @@ use std::fmt::Debug;
 use crate::{primitives::Intersection, ray::Ray, Vector};
 
 mod dielectric;
-pub use dielectric::*;
-
 mod diffuse;
-pub use diffuse::*;
-
 mod light;
-pub use light::*;
-
 mod reflector;
-pub use reflector::*;
 
 #[derive(Debug, Copy, Clone)]
 pub struct Scatter {
@@ -20,10 +13,30 @@ pub struct Scatter {
     pub attenuation: Vector,
 }
 
-pub trait Material: Debug + Send + Sync {
-    fn scatter(&self, _r: Ray, _i: Intersection) -> Option<Scatter>;
+#[derive(Debug)]
+pub enum Material {
+    Dielectric(f32),
+    Diffuse(Vector),
+    Light(Vector),
+    Reflector(Vector),
+}
 
-    fn emitted(&self, _r: Ray, _i: Intersection) -> Vector {
-        Vector::zeros()
+impl Material {
+    pub fn scatter(&self, r: Ray, i: Intersection) -> Option<Scatter> {
+        match self {
+            Self::Dielectric(ref_idx) => dielectric::scatter(*ref_idx, r, i),
+            Self::Diffuse(albedo) => diffuse::scatter(*albedo, r, i),
+            Self::Light(_) => None,
+            Self::Reflector(albedo) => reflector::scatter(*albedo, r, i),
+        }
+    }
+
+    pub fn emitted(&self, r: Ray, i: Intersection) -> Vector {
+        match self {
+            Self::Dielectric(_) => Vector::zeros(),
+            Self::Diffuse(_) => Vector::zeros(),
+            Self::Light(emittance) => light::emitted(*emittance, r, i),
+            Self::Reflector(_) => Vector::zeros(),
+        }
     }
 }

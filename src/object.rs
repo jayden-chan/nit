@@ -7,7 +7,7 @@ use crate::{
 #[derive(Debug)]
 pub struct Object {
     pub primitive: Box<dyn Primitive>,
-    pub material: Box<dyn Material>,
+    pub material: Material,
 }
 
 /// Describes an interaction between an incoming [`Ray`]

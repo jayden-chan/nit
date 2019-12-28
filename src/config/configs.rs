@@ -3,7 +3,7 @@ use crate::{
     camera::{Camera, CameraConstructor},
     color::ToneMappingOperator,
     config::{Config, Scene},
-    materials::{Dielectric, Diffuse, Light, Reflector},
+    materials::Material,
     object::Object,
     primitives::{
         Block, HittableList, Primitive, RectPlane, Rectangle, Rotate,
@@ -27,7 +27,7 @@ use std::{fs, io};
 #[allow(dead_code)]
 pub fn config_obj_bunny() -> Config {
     println!("Loading STL file");
-    let mut file = fs::File::open("test/sotvl_Spiral-Vase.stl")
+    let mut file = fs::File::open("test/squirtle_starter_1gen_flowalistik.STL")
         .map(io::BufReader::new)
         .unwrap();
     println!("Finished");
@@ -36,9 +36,7 @@ pub fn config_obj_bunny() -> Config {
         .into_iter()
         .map(|t| Object {
             primitive: t,
-            material: Box::new(Diffuse {
-                albedo: Vector::new(0.9, 0.1, 0.1),
-            }),
+            material: Material::Diffuse(Vector::new(0.9, 0.1, 0.1)),
         })
         .collect();
 
@@ -46,9 +44,15 @@ pub fn config_obj_bunny() -> Config {
         primitive: Box::new(Rectangle::<{ RectPlane::XY }>::new(
             -100000.0, 100000.0, -100000.0, 100000.0, -1.0, 1.0,
         )),
-        material: Box::new(Diffuse {
-            albedo: Vector::new(0.73, 0.73, 0.73),
-        }),
+        material: Material::Diffuse(Vector::new(0.73, 0.73, 0.73)),
+    });
+
+    objects.push(Object {
+        primitive: Box::new(Block::new(
+            Vector::new(90.0, -90.0, 0.0),
+            Vector::new(110.0, -110.0, 20.0),
+        )),
+        material: Material::Dielectric(1.52),
     });
 
     // objects.push(Object {
@@ -62,9 +66,7 @@ pub fn config_obj_bunny() -> Config {
 
     objects.push(Object {
         primitive: Box::new(Sphere::new(Vector::new(20.0, 0.0, 120.0), 15.0)),
-        material: Box::new(Light {
-            emittance: Vector::new(15.0, 14.0, 12.0),
-        }),
+        material: Material::Light(Vector::new(15.0, 14.0, 12.0)),
     });
 
     // objects.push(Object {

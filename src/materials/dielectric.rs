@@ -1,5 +1,5 @@
 use crate::{
-    materials::{Material, Scatter},
+    materials::Scatter,
     math::{vector_reflect, vector_refract},
     primitives::Intersection,
     ray::Ray,
@@ -27,49 +27,46 @@ fn schlick(cosine: f32, ref_idx: f32) -> f32 {
     r0 + (1.0 - r0) * f32::powi(1.0 - cosine, 5)
 }
 
-impl Material for Dielectric {
-    fn scatter(&self, r_in: Ray, i: Intersection) -> Option<Scatter> {
-        let reflected = vector_reflect(r_in.dir, i.normal);
+pub fn scatter(ref_idx: f32, r_in: Ray, i: Intersection) -> Option<Scatter> {
+    let reflected = vector_reflect(r_in.dir, i.normal);
 
-        let (outward_normal, ni_over_nt, cosine) =
-            if r_in.dir.dot(i.normal) > 0.0 {
-                (
-                    -i.normal,
-                    self.ref_idx,
-                    self.ref_idx * r_in.dir.dot(i.normal) * r_in.dir.inv_mag(),
-                )
-            } else {
-                (
-                    i.normal,
-                    1.0 / self.ref_idx,
-                    -r_in.dir.dot(i.normal) * r_in.dir.inv_mag(),
-                )
-            };
+    let (outward_normal, ni_over_nt, cosine) = if r_in.dir.dot(i.normal) > 0.0 {
+        (
+            -i.normal,
+            ref_idx,
+            ref_idx * r_in.dir.dot(i.normal) * r_in.dir.inv_mag(),
+        )
+    } else {
+        (
+            i.normal,
+            1.0 / ref_idx,
+            -r_in.dir.dot(i.normal) * r_in.dir.inv_mag(),
+        )
+    };
 
-        let refracted = vector_refract(r_in.dir, outward_normal, ni_over_nt);
+    let refracted = vector_refract(r_in.dir, outward_normal, ni_over_nt);
 
-        let reflect_probability = if refracted.is_some() {
-            schlick(cosine, self.ref_idx)
-        } else {
-            1.0
-        };
+    let reflect_probability = if refracted.is_some() {
+        schlick(cosine, ref_idx)
+    } else {
+        1.0
+    };
 
-        if random::<f32>() >= reflect_probability {
-            Some(Scatter {
-                specular: Ray {
-                    origin: i.p,
-                    dir: refracted.unwrap(),
-                },
-                attenuation: Vector::ones(),
-            })
-        } else {
-            Some(Scatter {
-                specular: Ray {
-                    origin: i.p,
-                    dir: reflected,
-                },
-                attenuation: Vector::ones(),
-            })
-        }
+    if random::<f32>() >= reflect_probability {
+        Some(Scatter {
+            specular: Ray {
+                origin: i.p,
+                dir: refracted.unwrap(),
+            },
+            attenuation: Vector::ones(),
+        })
+    } else {
+        Some(Scatter {
+            specular: Ray {
+                origin: i.p,
+                dir: reflected,
+            },
+            attenuation: Vector::ones(),
+        })
     }
 }

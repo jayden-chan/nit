@@ -1,28 +1,18 @@
 use crate::{
-    materials::{Material, Scatter},
-    math::random_on_unit_sphere,
-    primitives::Intersection,
-    ray::Ray,
-    Vector,
+    materials::Scatter, math::random_on_unit_sphere, primitives::Intersection,
+    ray::Ray, Vector,
 };
 
-#[derive(Debug, Copy, Clone)]
-pub struct Diffuse {
-    pub albedo: Vector,
-}
+pub fn scatter(albedo: Vector, _r: Ray, i: Intersection) -> Option<Scatter> {
+    let scattered = i.p + i.normal + random_on_unit_sphere();
 
-impl Material for Diffuse {
-    fn scatter(&self, _r: Ray, i: Intersection) -> Option<Scatter> {
-        let scattered = i.p + i.normal + random_on_unit_sphere();
+    let specular = Ray {
+        origin: i.p,
+        dir: (scattered - i.p),
+    };
 
-        let specular = Ray {
-            origin: i.p,
-            dir: (scattered - i.p),
-        };
-
-        Some(Scatter {
-            specular,
-            attenuation: self.albedo,
-        })
-    }
+    Some(Scatter {
+        specular,
+        attenuation: albedo,
+    })
 }
