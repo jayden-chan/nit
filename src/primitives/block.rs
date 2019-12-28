@@ -4,7 +4,7 @@ use crate::{aabb::Aabb, ray::Ray, Vector};
 #[derive(Debug)]
 pub struct Block {
     bbox: Aabb,
-    sides: Vec<Rectangle>,
+    sides: [Rectangle; 6],
 }
 
 impl Block {
@@ -29,7 +29,7 @@ impl Block {
 
 impl Block {
     pub fn new(p0: Vector, p1: Vector) -> Self {
-        let objects: Vec<Rectangle> = vec![
+        let objects: [Rectangle; 6] = [
             Rectangle::new(p0.x, p1.x, p0.y, p1.y, p1.z, 1.0, RectPlane::XY),
             Rectangle::new(p0.x, p1.x, p0.y, p1.y, p0.z, -1.0, RectPlane::XY),
             Rectangle::new(p0.x, p1.x, p0.z, p1.z, p1.y, 1.0, RectPlane::XY),
