@@ -5,10 +5,7 @@ use crate::{
     config::{Config, Scene},
     materials::Material,
     object::Object,
-    primitives::{
-        Block, HittableList, Primitive, RectPlane, Rectangle, Rotate,
-        RotationAxis, Sphere, Translate, Triangle,
-    },
+    primitives::{Block, Primitive, RectPlane, Rectangle, Sphere},
     stl_loader::StlLoader,
     vector3::Vector,
 };
@@ -25,57 +22,51 @@ const R_1920: (usize, usize) = (1920, 1080);
 use std::{fs, io};
 
 #[allow(dead_code)]
-pub fn config_obj_bunny() -> Config {
-    println!("Loading STL file");
+pub fn config_stl_test() -> Config {
     let mut file = fs::File::open("test/squirtle_starter_1gen_flowalistik.STL")
         .map(io::BufReader::new)
         .unwrap();
-    println!("Finished");
 
     let mut objects: Vec<Object> = StlLoader::parse(&mut file)
         .into_iter()
         .map(|t| Object {
             primitive: t,
+            transformation: None,
             material: Material::Diffuse(Vector::new(0.9, 0.1, 0.1)),
         })
         .collect();
 
     objects.push(Object {
-        primitive: Box::new(Rectangle::<{ RectPlane::XY }>::new(
-            -100000.0, 100000.0, -100000.0, 100000.0, -1.0, 1.0,
+        primitive: Primitive::Rectangle(Rectangle::new(
+            -100000.0,
+            100000.0,
+            -100000.0,
+            100000.0,
+            -1.0,
+            1.0,
+            RectPlane::XY,
         )),
+        transformation: None,
         material: Material::Diffuse(Vector::new(0.73, 0.73, 0.73)),
     });
 
     objects.push(Object {
-        primitive: Box::new(Block::new(
+        primitive: Primitive::Block(Block::new(
             Vector::new(90.0, -90.0, 0.0),
             Vector::new(110.0, -110.0, 20.0),
         )),
+        transformation: None,
         material: Material::Dielectric(1.52),
     });
 
-    // objects.push(Object {
-    //     primitive: Box::new(Rectangle::<{ RectPlane::YZ }>::new(
-    //         -100000.0, 100000.0, 1.0, 100000.0, -50.0, 1.0,
-    //     )),
-    //     material: Box::new(Reflector {
-    //         albedo: Vector::new(0.73, 0.73, 0.73),
-    //     }),
-    // });
-
     objects.push(Object {
-        primitive: Box::new(Sphere::new(Vector::new(20.0, 0.0, 120.0), 15.0)),
+        primitive: Primitive::Sphere(Sphere::new(
+            Vector::new(20.0, 0.0, 120.0),
+            15.0,
+        )),
+        transformation: None,
         material: Material::Light(Vector::new(15.0, 14.0, 12.0)),
     });
-
-    // objects.push(Object {
-    //     primitive: Box::new(Sphere::new(Vector::new(3.0, -30.0, 8.0), 8.0)),
-    //     material: Box::new(Dielectric { ref_idx: 1.52 }),
-    // });
-
-    println!("Constructing BVH");
-    println!("Objects: {}", objects.len());
 
     Config {
         resolution: R_240,
@@ -84,10 +75,10 @@ pub fn config_obj_bunny() -> Config {
         scene: Scene {
             objects: Bvh::construct(objects),
             camera: Camera::new(CameraConstructor {
-                look_at: Vector::new(-90.0, 10.0, 20.0),
-                look_from: Vector::new(120.0, -60.0, 30.0),
+                look_at: Vector::new(-90.0, 10.0, 30.0),
+                look_from: Vector::new(120.0, -60.0, 20.0),
                 vup: Vector::new(0.0, 0.0, 1.0),
-                vfov: 60.0,
+                vfov: 32.0,
                 aspect_r: 16.0 / 9.0,
                 aperture: 0.0,
                 focus_dist: 1.0,

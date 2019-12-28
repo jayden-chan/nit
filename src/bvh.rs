@@ -86,8 +86,8 @@ enum SortAxis {
 }
 
 fn sort_by_axis<const A: SortAxis>(a: &Object, b: &Object) -> Ordering {
-    let box_left = a.primitive.bounding_box().unwrap();
-    let box_right = b.primitive.bounding_box().unwrap();
+    let box_left = a.primitive.bounding_box();
+    let box_right = b.primitive.bounding_box();
 
     if box_left.min[A as usize] - box_right.min[A as usize] < 0.0 {
         Ordering::Less
@@ -116,7 +116,7 @@ impl Bvh {
             0 => panic!("wrong bvh length"),
             1 => {
                 let obj = objects.remove(0);
-                let bounding_box = obj.primitive.bounding_box().unwrap();
+                let bounding_box = obj.primitive.bounding_box();
                 return Self {
                     node_type: BvhNodeType::SingleLeaf(obj),
                     bounding_box,
@@ -125,8 +125,8 @@ impl Bvh {
             2 => {
                 let left = objects.remove(0);
                 let right = objects.remove(0);
-                let box_left = left.primitive.bounding_box().unwrap();
-                let box_right = right.primitive.bounding_box().unwrap();
+                let box_left = left.primitive.bounding_box();
+                let box_right = right.primitive.bounding_box();
 
                 let bounding_box = Aabb::surrounding_box(box_left, box_right);
                 return Self {

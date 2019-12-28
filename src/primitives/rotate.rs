@@ -10,14 +10,21 @@ pub enum RotationAxis {
 }
 
 #[derive(Debug)]
-pub struct Rotate<H: Primitive, const A: RotationAxis> {
-    hittable: H,
+pub struct Rotate {
     sin_theta: f32,
     cos_theta: f32,
     bounding_box: Option<Aabb>,
 }
 
-impl<H: Primitive, const A: RotationAxis> Primitive for Rotate<H, { A }> {
+pub struct RotateParameters {
+    r: Ray,
+    t_min: f32,
+    t_max: f32,
+    primitive: Primitive,
+    axis: RotationAxis,
+}
+
+impl Rotate {
     fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let (_, a_axis, b_axis) = match A {
             RotationAxis::X => (0, 1, 2),
@@ -68,8 +75,8 @@ impl<H: Primitive, const A: RotationAxis> Primitive for Rotate<H, { A }> {
     }
 }
 
-impl<H: Primitive, const A: RotationAxis> Rotate<H, { A }> {
-    pub fn new(hittable: H, angle: f32) -> Self {
+impl Rotate {
+    pub fn new(angle: f32) -> Self {
         let rads = (f32::consts::PI / 180.0) * angle;
         let sin_theta = f32::sin(rads);
         let cos_theta = f32::cos(rads);
@@ -124,7 +131,6 @@ impl<H: Primitive, const A: RotationAxis> Rotate<H, { A }> {
         });
 
         Self {
-            hittable,
             sin_theta,
             cos_theta,
             bounding_box,

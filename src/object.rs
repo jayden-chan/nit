@@ -1,12 +1,13 @@
 use crate::{
     materials::{Material, Scatter},
-    primitives::{Intersection, Primitive},
+    primitives::{Intersection, Primitive, Transformation},
     Vector,
 };
 
 #[derive(Debug)]
 pub struct Object {
-    pub primitive: Box<dyn Primitive>,
+    pub primitive: Primitive,
+    pub transformation: Option<Transformation>,
     pub material: Material,
 }
 

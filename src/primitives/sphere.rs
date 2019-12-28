@@ -1,11 +1,6 @@
 //! A simple Sphere object
 
-use crate::{
-    aabb::Aabb,
-    primitives::{Intersection, Primitive},
-    ray::Ray,
-    Vector,
-};
+use crate::{aabb::Aabb, primitives::Intersection, ray::Ray, Vector};
 
 use std::f32::consts::PI;
 
@@ -16,8 +11,8 @@ pub struct Sphere {
     bbox: Aabb,
 }
 
-impl Primitive for Sphere {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
+impl Sphere {
+    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let oc = r.origin - self.center;
 
         let a = r.dir.dot(r.dir);
@@ -50,8 +45,8 @@ impl Primitive for Sphere {
         None
     }
 
-    fn bounding_box(&self) -> Option<Aabb> {
-        Some(self.bbox)
+    pub fn bounding_box(&self) -> Aabb {
+        self.bbox
     }
 }
 

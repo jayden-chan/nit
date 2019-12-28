@@ -9,7 +9,7 @@ pub enum RectPlane {
 }
 
 #[derive(Debug)]
-pub struct Rectangle<const P: RectPlane> {
+pub struct Rectangle {
     a0: f32,
     a1: f32,
     b0: f32,
@@ -20,8 +20,16 @@ pub struct Rectangle<const P: RectPlane> {
     bbox: Aabb,
 }
 
-impl<const P: RectPlane> Rectangle<{ P }> {
-    pub fn new(a0: f32, a1: f32, b0: f32, b1: f32, k: f32, norm: f32) -> Self {
+impl Rectangle {
+    pub fn new(
+        a0: f32,
+        a1: f32,
+        b0: f32,
+        b1: f32,
+        k: f32,
+        norm: f32,
+        P: RectPlane,
+    ) -> Self {
         Rectangle {
             a0,
             a1,
@@ -56,8 +64,8 @@ impl<const P: RectPlane> Rectangle<{ P }> {
     }
 }
 
-impl<const P: RectPlane> Primitive for Rectangle<{ P }> {
-    fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
+impl Rectangle {
+    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
         let (k_ax, a_ax, b_ax) = self.plane;
 
         let t = (self.k - r.origin[k_ax]) / r.dir[k_ax];
@@ -81,7 +89,7 @@ impl<const P: RectPlane> Primitive for Rectangle<{ P }> {
         })
     }
 
-    fn bounding_box(&self) -> Option<Aabb> {
-        Some(self.bbox)
+    pub fn bounding_box(&self) -> Aabb {
+        self.bbox
     }
 }
