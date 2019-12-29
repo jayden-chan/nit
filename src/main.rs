@@ -1,5 +1,6 @@
 #![allow(incomplete_features)]
 #![feature(const_generics)]
+#![feature(slice_partition_at_index)]
 
 mod aabb;
 mod bvh;
