@@ -57,20 +57,8 @@ impl Bvh {
 impl Bvh {
     pub fn construct(mut objects: Vec<Object>) -> Self {
         let idx = (3.0 * random::<f32>()) as u32;
-        let len = objects.len();
 
-        objects.partition_at_index_by(len / 2, |a: &Object, b: &Object| {
-            let box_left = a.primitive.bounding_box();
-            let box_right = b.primitive.bounding_box();
-
-            if box_left.min[idx as usize] - box_right.min[idx as usize] < 0.0 {
-                Ordering::Less
-            } else {
-                Ordering::Greater
-            }
-        });
-
-        match len {
+        match objects.len() {
             0 => panic!("wrong bvh length"),
             1 => {
                 let obj = objects.remove(0);
@@ -81,6 +69,23 @@ impl Bvh {
                 };
             }
             l => {
+                objects.partition_at_index_by(
+                    l / 2,
+                    |a: &Object, b: &Object| {
+                        let box_left = a.primitive.bounding_box();
+                        let box_right = b.primitive.bounding_box();
+
+                        if box_left.min[idx as usize]
+                            - box_right.min[idx as usize]
+                            < 0.0
+                        {
+                            Ordering::Less
+                        } else {
+                            Ordering::Greater
+                        }
+                    },
+                );
+
                 let mut l_vec = objects;
                 let r_vec = l_vec.split_off(l / 2);
                 let left = Self::construct(l_vec);
