@@ -73,7 +73,7 @@ pub fn config_stl_test() -> Config {
         samples: 100,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
-            objects: Bvh::construct(objects),
+            objects: Bvh::new(objects),
             camera: Camera::new(CameraConstructor {
                 look_at: Vector::new(-90.0, 10.0, 30.0),
                 look_from: Vector::new(120.0, -60.0, 20.0),

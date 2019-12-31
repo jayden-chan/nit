@@ -55,7 +55,7 @@ impl Bvh {
 }
 
 impl Bvh {
-    pub fn construct(mut objects: Vec<Object>) -> Self {
+    pub fn new(mut objects: Vec<Object>) -> Self {
         let idx = (3.0 * random::<f32>()) as u32;
 
         match objects.len() {
@@ -88,8 +88,8 @@ impl Bvh {
 
                 let mut l_vec = objects;
                 let r_vec = l_vec.split_off(l / 2);
-                let left = Self::construct(l_vec);
-                let right = Self::construct(r_vec);
+                let left = Self::new(l_vec);
+                let right = Self::new(r_vec);
 
                 let bounding_box = Aabb::surrounding_box(
                     left.bounding_box,
