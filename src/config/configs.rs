@@ -38,10 +38,10 @@ pub fn config_stl_test() -> Config {
 
     objects.push(Object {
         primitive: Primitive::Rectangle(Rectangle::new(
-            -100000.0,
-            100000.0,
-            -100000.0,
-            100000.0,
+            -100_000.0,
+            100_000.0,
+            -100_000.0,
+            100_000.0,
             -1.0,
             1.0,
             RectPlane::XY,

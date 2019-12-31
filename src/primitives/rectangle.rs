@@ -1,4 +1,4 @@
-use super::{Intersection, Primitive};
+use super::Intersection;
 use crate::{aabb::Aabb, ray::Ray, Vector};
 
 #[derive(PartialEq, Eq)]

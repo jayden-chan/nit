@@ -23,31 +23,31 @@ pub struct Bvh {
 impl Bvh {
     pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Hit> {
         if self.bounding_box.hit(r, t_min, t_max) {
-            match &self.node_type {
+            return match &self.node_type {
                 BvhNodeType::Internal((left, right)) => {
                     match (
                         left.hit(r, t_min, t_max),
                         right.hit(r, t_min, t_max),
                     ) {
-                        (None, None) => return None,
-                        (Some(h), None) | (None, Some(h)) => return Some(h),
+                        (None, None) => None,
+                        (Some(h), None) | (None, Some(h)) => Some(h),
                         (Some(h_l), Some(h_r)) => {
                             if h_l.intersection.t < h_r.intersection.t {
-                                return Some(h_l);
+                                Some(h_l)
                             } else {
-                                return Some(h_r);
+                                Some(h_r)
                             }
                         }
                     }
                 }
                 BvhNodeType::Leaf(l) => {
-                    return l.primitive.hit(r, t_min, t_max).map(|i| Hit {
+                    l.primitive.hit(r, t_min, t_max).map(|i| Hit {
                         intersection: i,
                         scattered: l.material.scatter(r, i),
                         emitted: l.material.emitted(r, i),
-                    });
+                    })
                 }
-            }
+            };
         }
 
         None
@@ -63,10 +63,10 @@ impl Bvh {
             1 => {
                 let obj = objects.remove(0);
                 let bounding_box = obj.primitive.bounding_box();
-                return Self {
+                Self {
                     node_type: BvhNodeType::Leaf(obj),
                     bounding_box,
-                };
+                }
             }
             l => {
                 objects.partition_at_index_by(

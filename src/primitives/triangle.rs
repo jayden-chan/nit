@@ -75,15 +75,15 @@ impl Triangle {
 
         let t = f * self.edge2.dot(q);
         if t > EPSILON && t < 1.0 / EPSILON && t > t_min && t < t_max {
-            return Some(Intersection {
+            Some(Intersection {
                 u,
                 v,
                 t,
                 p: r.origin + r.dir * t,
                 normal: self.normal,
-            });
+            })
         } else {
-            return None;
+            None
         }
     }
 
