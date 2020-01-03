@@ -53,12 +53,17 @@ pub enum Primitive {
 }
 
 impl Primitive {
-    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
+    pub fn intersect(
+        &self,
+        r: Ray,
+        t_min: f32,
+        t_max: f32,
+    ) -> Option<Intersection> {
         match self {
-            Primitive::Block(o) => o.hit(r, t_min, t_max),
-            Primitive::Rectangle(o) => o.hit(r, t_min, t_max),
-            Primitive::Sphere(o) => o.hit(r, t_min, t_max),
-            Primitive::Triangle(o) => o.hit(r, t_min, t_max),
+            Primitive::Block(o) => o.intersect(r, t_min, t_max),
+            Primitive::Rectangle(o) => o.intersect(r, t_min, t_max),
+            Primitive::Sphere(o) => o.intersect(r, t_min, t_max),
+            Primitive::Triangle(o) => o.intersect(r, t_min, t_max),
         }
     }
 

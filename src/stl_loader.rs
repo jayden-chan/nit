@@ -23,9 +23,7 @@ impl StlLoader {
             let v2 = Vector::new(v2[0], v2[1], v2[2]);
 
             let normal = -Vector::new(f.normal[0], f.normal[1], f.normal[2]);
-            ret.push(Primitive::Triangle(Triangle::with_normal(
-                v0, v1, v2, normal,
-            )));
+            ret.push(Primitive::Triangle(Triangle::new(v0, v1, v2, normal)));
         });
 
         ret

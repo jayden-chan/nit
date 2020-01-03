@@ -12,7 +12,23 @@ pub struct Sphere {
 }
 
 impl Sphere {
-    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
+    pub fn new(center: Vector, radius: f32) -> Self {
+        Self {
+            center,
+            radius,
+            bbox: Aabb::new(
+                center - Vector::new(radius, radius, radius),
+                center + Vector::new(radius, radius, radius),
+            ),
+        }
+    }
+
+    pub fn intersect(
+        &self,
+        r: Ray,
+        t_min: f32,
+        t_max: f32,
+    ) -> Option<Intersection> {
         let oc = r.origin - self.center;
 
         let a = r.dir.dot(r.dir);
@@ -47,19 +63,6 @@ impl Sphere {
 
     pub fn bounding_box(&self) -> Aabb {
         self.bbox
-    }
-}
-
-impl Sphere {
-    pub fn new(center: Vector, radius: f32) -> Self {
-        Self {
-            center,
-            radius,
-            bbox: Aabb::new(
-                center - Vector::new(radius, radius, radius),
-                center + Vector::new(radius, radius, radius),
-            ),
-        }
     }
 }
 

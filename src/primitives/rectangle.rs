@@ -62,10 +62,13 @@ impl Rectangle {
             },
         }
     }
-}
 
-impl Rectangle {
-    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
+    pub fn intersect(
+        &self,
+        r: Ray,
+        t_min: f32,
+        t_max: f32,
+    ) -> Option<Intersection> {
         let (k_ax, a_ax, b_ax) = self.plane;
 
         let t = (self.k - r.origin[k_ax]) / r.dir[k_ax];

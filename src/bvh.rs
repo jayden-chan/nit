@@ -41,7 +41,7 @@ impl Bvh {
                     }
                 }
                 BvhNodeType::Leaf(l) => {
-                    l.primitive.hit(r, t_min, t_max).map(|i| Hit {
+                    l.primitive.intersect(r, t_min, t_max).map(|i| Hit {
                         intersection: i,
                         scattered: l.material.scatter(r, i),
                         emitted: l.material.emitted(r, i),

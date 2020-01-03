@@ -8,26 +8,6 @@ pub struct Block {
 }
 
 impl Block {
-    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
-        let mut result = None;
-        let mut closest_so_far = t_max;
-
-        for hittable in &self.sides {
-            if let Some(hit) = hittable.hit(r, t_min, closest_so_far) {
-                result = Some(hit);
-                closest_so_far = hit.t;
-            }
-        }
-
-        result
-    }
-
-    pub fn bounding_box(&self) -> Aabb {
-        self.bbox
-    }
-}
-
-impl Block {
     pub fn new(p0: Vector, p1: Vector) -> Self {
         let objects: [Rectangle; 6] = [
             Rectangle::new(p0.x, p1.x, p0.y, p1.y, p1.z, 1.0, RectPlane::XY),
@@ -42,5 +22,28 @@ impl Block {
             bbox: Aabb::new(p0, p1),
             sides: objects,
         }
+    }
+
+    pub fn intersect(
+        &self,
+        r: Ray,
+        t_min: f32,
+        t_max: f32,
+    ) -> Option<Intersection> {
+        let mut result = None;
+        let mut closest_so_far = t_max;
+
+        for hittable in &self.sides {
+            if let Some(hit) = hittable.intersect(r, t_min, closest_so_far) {
+                result = Some(hit);
+                closest_so_far = hit.t;
+            }
+        }
+
+        result
+    }
+
+    pub fn bounding_box(&self) -> Aabb {
+        self.bbox
     }
 }

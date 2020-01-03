@@ -16,12 +16,7 @@ pub struct Triangle {
 }
 
 impl Triangle {
-    pub fn with_normal(
-        v0: Vector,
-        v1: Vector,
-        v2: Vector,
-        normal: Vector,
-    ) -> Self {
+    pub fn new(v0: Vector, v1: Vector, v2: Vector, normal: Vector) -> Self {
         let edge1 = v1 - v0;
         let edge2 = v2 - v0;
 
@@ -47,10 +42,13 @@ impl Triangle {
             bbox,
         }
     }
-}
 
-impl Triangle {
-    pub fn hit(&self, r: Ray, t_min: f32, t_max: f32) -> Option<Intersection> {
+    pub fn intersect(
+        &self,
+        r: Ray,
+        t_min: f32,
+        t_max: f32,
+    ) -> Option<Intersection> {
         let h = r.dir.cross(self.edge2);
         let a = self.edge1.dot(h);
 
