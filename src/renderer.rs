@@ -75,7 +75,7 @@ pub fn trace(r: Ray, scene: &Scene) -> Vector {
 }
 
 /// Renders a progress bar on the command line
-fn progress_bar(curr: usize, total: usize) {
+fn progress_bar(curr: u16, total: u16) {
     let done_chars = (curr as f32 / total as f32) * 80_f32;
     let blank_chars = 80 - done_chars as usize;
 

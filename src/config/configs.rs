@@ -11,13 +11,13 @@ use crate::{
 };
 
 #[allow(dead_code)]
-const R_240: (usize, usize) = (240, 135);
+const R_240: (u16, u16) = (240, 135);
 #[allow(dead_code)]
-const R_480: (usize, usize) = (480, 270);
+const R_480: (u16, u16) = (480, 270);
 #[allow(dead_code)]
-const R_1600: (usize, usize) = (1600, 900);
+const R_1600: (u16, u16) = (1600, 900);
 #[allow(dead_code)]
-const R_1920: (usize, usize) = (1920, 1080);
+const R_1920: (u16, u16) = (1920, 1080);
 
 use std::{fs, io};
 
@@ -70,7 +70,7 @@ pub fn config_stl_test() -> Config {
 
     Config {
         resolution: R_240,
-        samples: 100,
+        samples: 20,
         tmo: ToneMappingOperator::ReinhardJodie,
         scene: Scene {
             objects: Bvh::new(objects),

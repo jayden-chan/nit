@@ -11,7 +11,7 @@ pub struct Scene {
 
 #[derive(Debug)]
 pub struct Config {
-    pub resolution: (usize, usize),
+    pub resolution: (u16, u16),
     pub samples: usize,
     pub tmo: ToneMappingOperator,
     pub scene: Scene,

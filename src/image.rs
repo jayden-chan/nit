@@ -10,9 +10,9 @@ pub struct Pixel {
     /// Blue value
     pub b: f32,
     /// X coordinate
-    pub x: usize,
+    pub x: u16,
     /// Y coordinate
-    pub y: usize,
+    pub y: u16,
 }
 
 impl Pixel {
@@ -28,15 +28,15 @@ pub struct ImageBuffer {
 }
 
 impl ImageBuffer {
-    pub fn new(resolution: (usize, usize)) -> Self {
+    pub fn new(resolution: (u16, u16)) -> Self {
         let (width, height) = resolution;
-        let mut buffer = Vec::with_capacity(height);
+        let mut buffer = Vec::with_capacity(height as usize);
 
         for y in 0..height {
-            buffer.push(Vec::with_capacity(width));
+            buffer.push(Vec::with_capacity(width as usize));
 
             for x in 0..width {
-                buffer[y].push(Pixel {
+                buffer[y as usize].push(Pixel {
                     r: 0.0,
                     g: 0.0,
                     b: 0.0,
