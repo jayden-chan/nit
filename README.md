@@ -1,12 +1,14 @@
 # Nit
 
-Nit is a path tracing renderer built with Rust
+Nit is a Monte-Carlo path-tracing renderer built with Rust
 
 <p align="center">
-<img width="650" height="650" src="https://i.imgur.com/lXpQpBU.png"/>
+<img width="650" height="650" src="https://i.imgur.com/IEIa38f.png"/>
 </p>
 
 ![](https://i.imgur.com/52RFc5S.png)
+![](https://i.imgur.com/n5MBOtM.png)
+![](https://i.imgur.com/VPsD2Fx.png)
 
 ## Project Roadmap
 
