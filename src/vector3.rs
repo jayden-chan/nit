@@ -1,9 +1,26 @@
-//! This module contains the 3D Vector implementation used
-//! by pretty much everything in the program. Obviously this
-//! is kind of boilerplate-ey and I could have just used an external
-//! crate, but I wanted to minimize the number of dependencies
-//! since this is a learning project.
+/**
+ * Copyright © 2019 Jayden Chan. All rights reserved.
+ *
+ * Nit is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * Nit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Nit. If not, see <https://www.gnu.org/licenses/>.
+ */
 
+/**
+ * This module contains the 3D Vector implementation used
+ * by pretty much everything in the program. Obviously this
+ * is kind of boilerplate-ey and I could have just used an external
+ * crate, but I wanted to minimize the number of dependencies
+ * since this is a learning project.
+ */
 use crate::math::fast_inv_sqrt;
 use rand::prelude::*;
 

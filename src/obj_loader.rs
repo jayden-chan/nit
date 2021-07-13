@@ -1,4 +1,20 @@
 /**
+ * Copyright © 2019 Jayden Chan. All rights reserved.
+ *
+ * Nit is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License version 3
+ * as published by the Free Software Foundation.
+ *
+ * Nit is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the
+ * GNU General Public License for more details.
+ *
+ * You should have received a copy of the GNU General Public License
+ * along with Nit. If not, see <https://www.gnu.org/licenses/>.
+ */
+
+/**
  * Adapted from obj_parser.rs by Aleksey Kladov
  * @matklad on GitHub
  * https://github.com/matklad/rustraytracer/blob/946e5c1f7d7dfadf5209c6f505453835bcd12f50/libs/geom/src/shape/mesh/obj_parser.rs
