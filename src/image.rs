@@ -85,9 +85,7 @@ impl ImageBuffer {
         tmo.apply(&mut self.buffer);
 
         File::create(&path)
-            .map_err(|why| {
-                format!("Couldn't create {}: {}", display, why.description())
-            })
+            .map_err(|why| format!("Couldn't create {}: {}", display, why))
             .and_then(|mut file| {
                 let img_header = format!("P6\n{} {}\n255\n", width, height);
                 let mut img_buffer = Vec::from(img_header.as_bytes());
@@ -102,11 +100,7 @@ impl ImageBuffer {
                 });
 
                 file.write_all(&img_buffer).map_err(|why| {
-                    format!(
-                        "Couldn't create {}: {}",
-                        display,
-                        why.description()
-                    )
+                    format!("Couldn't create {}: {}", display, why)
                 })
             })
     }

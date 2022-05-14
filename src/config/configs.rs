@@ -36,71 +36,71 @@ const R_1920: (u16, u16) = (1920, 1080);
 
 use std::{fs, io};
 
-#[allow(dead_code)]
-pub fn config_stl_test() -> Config {
-    let mut file = fs::File::open("test/squirtle_starter_1gen_flowalistik.STL")
-        .map(io::BufReader::new)
-        .unwrap();
+// #[allow(dead_code)]
+// pub fn config_stl_test() -> Config {
+//     let mut file = fs::File::open("test/squirtle_starter_1gen_flowalistik.STL")
+//         .map(io::BufReader::new)
+//         .unwrap();
 
-    let mut objects: Vec<Object> = StlLoader::parse(&mut file)
-        .into_iter()
-        .map(|t| Object {
-            primitive: t,
-            transformation: None,
-            material: Material::Diffuse(Vector::new(0.9, 0.1, 0.1)),
-        })
-        .collect();
+//     let mut objects: Vec<Object> = StlLoader::parse(&mut file)
+//         .into_iter()
+//         .map(|t| Object {
+//             primitive: t,
+//             transformation: None,
+//             material: Material::Diffuse(Vector::new(0.9, 0.1, 0.1)),
+//         })
+//         .collect();
 
-    objects.push(Object {
-        primitive: Primitive::Rectangle(Rectangle::new(
-            -100_000.0,
-            100_000.0,
-            -100_000.0,
-            100_000.0,
-            -1.0,
-            1.0,
-            RectPlane::XY,
-        )),
-        transformation: None,
-        material: Material::Diffuse(Vector::new(0.73, 0.73, 0.73)),
-    });
+//     objects.push(Object {
+//         primitive: Primitive::Rectangle(Rectangle::new(
+//             -100_000.0,
+//             100_000.0,
+//             -100_000.0,
+//             100_000.0,
+//             -1.0,
+//             1.0,
+//             RectPlane::XY,
+//         )),
+//         transformation: None,
+//         material: Material::Diffuse(Vector::new(0.73, 0.73, 0.73)),
+//     });
 
-    objects.push(Object {
-        primitive: Primitive::Block(Block::new(
-            Vector::new(90.0, -90.0, 0.0),
-            Vector::new(110.0, -110.0, 20.0),
-        )),
-        transformation: None,
-        material: Material::Dielectric(1.52),
-    });
+//     objects.push(Object {
+//         primitive: Primitive::Block(Block::new(
+//             Vector::new(90.0, -90.0, 0.0),
+//             Vector::new(110.0, -110.0, 20.0),
+//         )),
+//         transformation: None,
+//         material: Material::Dielectric(1.52),
+//     });
 
-    objects.push(Object {
-        primitive: Primitive::Sphere(Sphere::new(
-            Vector::new(20.0, 0.0, 120.0),
-            15.0,
-        )),
-        transformation: None,
-        material: Material::Light(Vector::new(15.0, 14.0, 12.0)),
-    });
+//     objects.push(Object {
+//         primitive: Primitive::Sphere(Sphere::new(
+//             Vector::new(20.0, 0.0, 120.0),
+//             15.0,
+//         )),
+//         transformation: None,
+//         material: Material::Light(Vector::new(15.0, 14.0, 12.0)),
+//     });
 
-    Config {
-        resolution: R_240,
-        samples: 20,
-        tmo: ToneMappingOperator::ReinhardJodie,
-        scene: Scene {
-            objects: Bvh::new(objects),
-            camera: Camera::new(CameraConstructor {
-                look_at: Vector::new(-90.0, 10.0, 30.0),
-                look_from: Vector::new(120.0, -60.0, 20.0),
-                vup: Vector::new(0.0, 0.0, 1.0),
-                vfov: 32.0,
-                aspect_r: 16.0 / 9.0,
-                aperture: 0.0,
-                focus_dist: 1.0,
-            }),
-        },
-    }
-}
+//     Config {
+//         resolution: R_480,
+//         samples: 300,
+//         tmo: ToneMappingOperator::ReinhardJodie,
+//         scene: Scene {
+//             objects: Bvh::new(objects),
+//             camera: Camera::new(CameraConstructor {
+//                 look_at: Vector::new(-90.0, 10.0, 30.0),
+//                 look_from: Vector::new(120.0, -60.0, 20.0),
+//                 vup: Vector::new(0.0, 0.0, 1.0),
+//                 vfov: 32.0,
+//                 aspect_r: 16.0 / 9.0,
+//                 aperture: 0.0,
+//                 focus_dist: 1.0,
+//             }),
+//         },
+//     }
+// }
 
 // #[allow(dead_code)]
 // pub fn config_test_ball() -> Config {
@@ -356,98 +356,123 @@ pub fn config_stl_test() -> Config {
 //     }
 // }
 
-// #[allow(dead_code)]
-// pub fn config_cornell_box() -> Config {
-//     let objects = cornell_box(555.0);
+#[allow(dead_code)]
+pub fn config_cornell_box() -> Config {
+    let objects = cornell_box(555.0);
 
-//     Config {
-//         resolution: (250, 250),
-//         samples: 400,
-//         tmo: ToneMappingOperator::ReinhardJodie,
-//         scene: Scene {
-//             objects: Box::new(HittableList::new(objects)),
-//             camera: Camera::new(CameraConstructor {
-//                 look_from: Vector::new(278.0, 278.0, -772.0),
-//                 look_at: Vector::new(278.0, 278.0, 0.0),
-//                 vup: Vector::new(0.0, 1.0, 0.0),
-//                 vfov: 40.0,
-//                 aspect_r: 1.0,
-//                 aperture: 0.0,
-//                 focus_dist: 1.0,
-//             }),
-//         },
-//     }
-// }
+    Config {
+        resolution: (320, 320),
+        samples: 200,
+        tmo: ToneMappingOperator::ReinhardJodie,
+        scene: Scene {
+            objects: Bvh::new(objects),
+            camera: Camera::new(CameraConstructor {
+                look_from: Vector::new(278.0, 278.0, -772.0),
+                look_at: Vector::new(278.0, 278.0, 0.0),
+                vup: Vector::new(0.0, 1.0, 0.0),
+                vfov: 40.0,
+                aspect_r: 1.0,
+                aperture: 0.0,
+                focus_dist: 1.0,
+            }),
+        },
+    }
+}
 
-// #[allow(dead_code)]
-// fn cornell_box(size: f32) -> Vec<Box<dyn Primitive>> {
-//     let green = Vector::new(0.12, 0.45, 0.15);
-//     let red = Vector::new(0.65, 0.05, 0.05);
-//     let white = Vector::new(0.73, 0.73, 0.73);
+#[allow(dead_code)]
+fn cornell_box(size: f32) -> Vec<Object> {
+    let green = Vector::new(0.12, 0.45, 0.15);
+    let red = Vector::new(0.65, 0.05, 0.05);
+    let white = Vector::new(0.73, 0.73, 0.73);
 
-//     vec![
-//         // Green wall (left)
-//         Box::new(Rectangle::<Diffuse, { RectPlane::YZ }>::new(
-//             0.0,
-//             size,
-//             0.0,
-//             size,
-//             size,
-//             -1.0,
-//             Diffuse { albedo: green },
-//         )),
-//         // Red wall (right)
-//         Box::new(Rectangle::<Diffuse, { RectPlane::YZ }>::new(
-//             0.0,
-//             size,
-//             0.0,
-//             size,
-//             0.0,
-//             1.0,
-//             Diffuse { albedo: red },
-//         )),
-//         // Light
-//         Box::new(Rectangle::<Light, { RectPlane::XZ }>::new(
-//             // Magic numbers Pepega Clap
-//             size / 2.60563380281690140845,
-//             size / 1.61807580174927113702,
-//             size / 2.44493392070484581497,
-//             size / 1.67168674698795180722,
-//             size - 0.01,
-//             -1.0,
-//             Light {
-//                 emittance: Vector::new(25.2 / 2.0, 18.7 / 2.0, 6.0 / 2.0),
-//             },
-//         )),
-//         // Ceiling
-//         Box::new(Rectangle::<Diffuse, { RectPlane::XZ }>::new(
-//             0.0,
-//             size,
-//             0.0,
-//             size,
-//             size,
-//             -1.0,
-//             Diffuse { albedo: white },
-//         )),
-//         // Floor
-//         Box::new(Rectangle::<Diffuse, { RectPlane::XZ }>::new(
-//             0.0,
-//             size,
-//             0.0,
-//             size,
-//             0.0,
-//             1.0,
-//             Diffuse { albedo: white },
-//         )),
-//         // Back wall
-//         Box::new(Rectangle::<Diffuse, { RectPlane::XY }>::new(
-//             0.0,
-//             size,
-//             0.0,
-//             size,
-//             size,
-//             -1.0,
-//             Diffuse { albedo: white },
-//         )),
-//     ]
-// }
+    vec![
+        // Green wall (left)
+        Object {
+            primitive: Primitive::Rectangle(Rectangle::new(
+                0.0,
+                size,
+                0.0,
+                size,
+                size,
+                -1.0,
+                RectPlane::YZ,
+            )),
+            transformation: None,
+            material: Material::Diffuse(green),
+        },
+        // Red wall (right)
+        Object {
+            primitive: Primitive::Rectangle(Rectangle::new(
+                0.0,
+                size,
+                0.0,
+                size,
+                0.0,
+                1.0,
+                RectPlane::YZ,
+            )),
+            transformation: None,
+            material: Material::Diffuse(red),
+        },
+        // Light
+        Object {
+            primitive: Primitive::Rectangle(Rectangle::new(
+                size / 2.60563380281690140845,
+                size / 1.61807580174927113702,
+                size / 2.44493392070484581497,
+                size / 1.67168674698795180722,
+                size - 0.01,
+                -1.0,
+                RectPlane::XZ,
+            )),
+            transformation: None,
+            material: Material::Light(Vector::new(
+                25.2 / 2.0,
+                18.7 / 2.0,
+                6.0 / 2.0,
+            )),
+        },
+        // Ceiling
+        Object {
+            primitive: Primitive::Rectangle(Rectangle::new(
+                0.0,
+                size,
+                0.0,
+                size,
+                size,
+                -1.0,
+                RectPlane::XZ,
+            )),
+            transformation: None,
+            material: Material::Diffuse(white),
+        },
+        // Floor
+        Object {
+            primitive: Primitive::Rectangle(Rectangle::new(
+                0.0,
+                size,
+                0.0,
+                size,
+                0.0,
+                1.0,
+                RectPlane::XZ,
+            )),
+            transformation: None,
+            material: Material::Diffuse(white),
+        },
+        // Back wall
+        Object {
+            primitive: Primitive::Rectangle(Rectangle::new(
+                0.0,
+                size,
+                0.0,
+                size,
+                size,
+                -1.0,
+                RectPlane::XY,
+            )),
+            transformation: None,
+            material: Material::Diffuse(white),
+        },
+    ]
+}

@@ -1,6 +1,6 @@
 #![allow(incomplete_features)]
-#![feature(const_generics)]
-#![feature(slice_partition_at_index)]
+#![feature(adt_const_params)]
+#![feature(generic_const_exprs)]
 
 mod aabb;
 mod bvh;
@@ -39,7 +39,8 @@ use std::time;
 
 fn main() -> Result<(), String> {
     let start_time = time::Instant::now();
-    let config = config_stl_test();
+    // let config = config_stl_test();
+    let config = config_cornell_box();
     let tmo = config.tmo;
 
     let mut buffer = ImageBuffer::new(config.resolution);

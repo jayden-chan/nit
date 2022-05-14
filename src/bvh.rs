@@ -84,7 +84,7 @@ impl Bvh {
                 }
             }
             l => {
-                objects.partition_at_index_by(
+                objects.select_nth_unstable_by(
                     l / 2,
                     |a: &Object, b: &Object| {
                         let box_left = a.primitive.bounding_box();
